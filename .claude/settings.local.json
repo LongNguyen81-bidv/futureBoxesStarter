@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(npx create-expo-app@latest:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(npx @context7/cli@latest docs react-native View)",
+      "Bash(npm run type-check:*)",
+      "Bash(npm run:*)",
+      "Bash(npx context7:*)",
+      "Bash(context7 react-native-reanimated useAnimatedStyle shared-values worklets:*)",
+      "WebSearch",
+      "Bash(cd:*)",
+      "Bash(context7 react-native-reanimated shared-values-animations:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(del nul)"
+    ]
+  }
+}
