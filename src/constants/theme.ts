@@ -9,7 +9,7 @@
  * - Animation durations
  */
 
-import { Platform } from 'react-native';
+import { Platform as RNPlatform } from 'react-native';
 
 // Typography Scale
 export const Typography = {
@@ -155,9 +155,9 @@ export const Grid = {
 
 // Platform-specific adjustments
 export const Platform = {
-  isIOS: Platform.OS === 'ios',
-  isAndroid: Platform.OS === 'android',
-  isWeb: Platform.OS === 'web',
+  isIOS: RNPlatform.OS === 'ios',
+  isAndroid: RNPlatform.OS === 'android',
+  isWeb: RNPlatform.OS === 'web',
 } as const;
 
 // Export all theme values

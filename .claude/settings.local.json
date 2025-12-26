@@ -24,7 +24,8 @@
       "Bash(git push:*)",
       "Bash(context7 react-native FlatList-props-rendering)",
       "Bash(context7 react-native-gesture-handler swipeable:*)",
-      "Bash(npx @context7/cli react-native-reanimated useAnimatedStyle)"
+      "Bash(npx @context7/cli react-native-reanimated useAnimatedStyle)",
+      "Bash(npx expo install:*)"
     ]
   }
 }

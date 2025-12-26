@@ -36,12 +36,16 @@ interface OpenCapsuleScreenProps {
   capsule: OpenCapsuleData;
   onClose: () => void;
   onContinue: () => void;
+  onDelete?: () => void; // Optional delete handler for Archive view
+  fromArchive?: boolean; // Flag to indicate viewing from Archive
 }
 
 export const OpenCapsuleScreen: React.FC<OpenCapsuleScreenProps> = ({
   capsule,
   onClose,
   onContinue,
+  onDelete,
+  fromArchive = false,
 }) => {
   const [showAnimation, setShowAnimation] = useState(true);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -133,6 +137,16 @@ export const OpenCapsuleScreen: React.FC<OpenCapsuleScreenProps> = ({
       <Animated.View style={[styles.contentContainer, contentAnimatedStyle]}>
         {/* Header */}
         <View style={styles.header}>
+          <View style={styles.headerLeft} />
+          {fromArchive && onDelete && (
+            <TouchableOpacity
+              onPress={onDelete}
+              style={styles.deleteButton}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Ionicons name="trash-outline" size={24} color={Colors.ui.danger} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={handleClose}
             style={styles.closeButton}
@@ -215,10 +229,17 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
+  },
+  headerLeft: {
+    width: 40, // Spacer for alignment
+  },
+  deleteButton: {
+    padding: Spacing.sm,
+    marginRight: Spacing.xs,
   },
   closeButton: {
     padding: Spacing.sm,

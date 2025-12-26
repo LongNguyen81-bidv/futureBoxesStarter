@@ -10,7 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { OpenCapsuleScreen } from '../../components/OpenCapsuleScreen';
-import { markCapsuleAsOpened } from '../services/databaseService';
+import { markCapsuleAsOpened, deleteCapsule } from '../services/databaseService';
 import {
   getCapsuleWithImages,
   toOpenCapsuleData,
@@ -25,7 +25,7 @@ type OpenCapsuleRouteProp = RouteProp<RootStackParamList, 'OpenCapsule'>;
 export const OpenCapsuleScreenContainer: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<OpenCapsuleRouteProp>();
-  const { capsuleId } = route.params;
+  const { capsuleId, fromArchive } = route.params;
 
   const [capsule, setCapsule] = useState<OpenCapsuleData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -130,6 +130,60 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
     }
   };
 
+  const handleDelete = () => {
+    if (!capsule) return;
+
+    Alert.alert(
+      'Delete Capsule',
+      'Are you sure you want to delete this capsule? This cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => handleDeleteConfirm(),
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!capsule) return;
+
+    console.log('[OpenCapsuleContainer] Delete confirmed for capsule:', capsule.id);
+
+    try {
+      // Show loading state
+      setLoading(true);
+
+      // Delete from database and file system (atomic operation)
+      await deleteCapsule(capsule.id);
+
+      console.log('[OpenCapsuleContainer] Capsule deleted successfully:', capsule.id);
+
+      // Navigate back to Archive (list will auto-refresh via useFocusEffect)
+      navigation.navigate('Archive');
+
+      // Success feedback is implicit - user sees capsule gone from Archive list
+    } catch (error) {
+      console.error('[OpenCapsuleContainer] Delete failed:', error);
+
+      // Show error alert and keep on current screen
+      Alert.alert(
+        'Delete Failed',
+        error instanceof Error ? error.message : 'Failed to delete capsule. Please try again.',
+        [{ text: 'OK' }]
+      );
+
+      // Reset loading state to allow retry
+      setLoading(false);
+    }
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -155,6 +209,8 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
       capsule={capsule}
       onClose={handleClose}
       onContinue={handleContinue}
+      onDelete={fromArchive ? handleDelete : undefined}
+      fromArchive={fromArchive}
     />
   );
 };

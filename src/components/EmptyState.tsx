@@ -6,6 +6,7 @@
  *
  * Features:
  * - Floating animation for illustration
+ * - Entry animations (staggered fade-in)
  * - Clear messaging
  * - Call-to-action button
  */
@@ -19,6 +20,13 @@ import {
   Easing,
   TouchableOpacity,
 } from 'react-native';
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  withSpring,
+} from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons';
 import { UIColors } from '../constants/colors';
 import { Typography, Spacing, BorderRadius, Shadows } from '../constants/theme';
@@ -28,10 +36,19 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({ onCreatePress }) => {
-  // Float animation for the icon
+  // Float animation for the icon (legacy Animated for continuous loop)
   const floatAnim = useRef(new Animated.Value(0)).current;
 
+  // Entry animations (Reanimated for staggered fade-in)
+  const illustrationOpacity = useSharedValue(0);
+  const illustrationScale = useSharedValue(0.8);
+  const titleOpacity = useSharedValue(0);
+  const subtitleOpacity = useSharedValue(0);
+  const ctaOpacity = useSharedValue(0);
+  const ctaScale = useSharedValue(0.9);
+
   useEffect(() => {
+    // Float animation (continuous loop)
     const float = Animated.loop(
       Animated.sequence([
         Animated.timing(floatAnim, {
@@ -50,42 +67,88 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ onCreatePress }) => {
     );
     float.start();
 
+    // Entry animations (staggered)
+    illustrationOpacity.value = withTiming(1, { duration: 400 });
+    illustrationScale.value = withSpring(1, {
+      damping: 12,
+      stiffness: 100,
+    });
+    titleOpacity.value = withDelay(100, withTiming(1, { duration: 300 }));
+    subtitleOpacity.value = withDelay(200, withTiming(1, { duration: 300 }));
+    ctaOpacity.value = withDelay(300, withTiming(1, { duration: 300 }));
+    ctaScale.value = withDelay(
+      300,
+      withSpring(1, {
+        damping: 10,
+        stiffness: 100,
+      })
+    );
+
     return () => float.stop();
   }, [floatAnim]);
 
+  // Animated styles for entry animations
+  const illustrationAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: illustrationOpacity.value,
+    transform: [{ scale: illustrationScale.value }],
+  }));
+
+  const titleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+  }));
+
+  const subtitleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: subtitleOpacity.value,
+  }));
+
+  const ctaAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: ctaOpacity.value,
+    transform: [{ scale: ctaScale.value }],
+  }));
+
   return (
     <View style={styles.container}>
-      {/* Floating illustration */}
-      <Animated.View
-        style={[
-          styles.illustrationContainer,
-          {
-            transform: [{ translateY: floatAnim }],
-          },
-        ]}
-      >
-        <View style={styles.iconCircle}>
-          <MaterialIcons name="inbox" size={80} color={UIColors.primary} />
-        </View>
-      </Animated.View>
+      {/* Floating illustration with entry animation */}
+      <Reanimated.View style={illustrationAnimatedStyle}>
+        <Animated.View
+          style={[
+            styles.illustrationContainer,
+            {
+              transform: [{ translateY: floatAnim }],
+            },
+          ]}
+        >
+          <View style={styles.iconCircle}>
+            <MaterialIcons
+              name="card-giftcard"
+              size={80}
+              color={UIColors.primary}
+            />
+          </View>
+        </Animated.View>
+      </Reanimated.View>
 
-      {/* Title */}
-      <Text style={styles.title}>No capsules yet</Text>
+      {/* Title with entry animation */}
+      <Reanimated.Text style={[styles.title, titleAnimatedStyle]}>
+        Create your first capsule
+      </Reanimated.Text>
 
-      {/* Subtitle */}
-      <Text style={styles.subtitle}>
-        Create your first time capsule to send a message to your future self
-      </Text>
+      {/* Subtitle with entry animation */}
+      <Reanimated.Text style={[styles.subtitle, subtitleAnimatedStyle]}>
+        Send a message to your future self. What will you want to remember?
+      </Reanimated.Text>
 
-      {/* CTA Button */}
-      <TouchableOpacity
-        style={styles.ctaButton}
-        onPress={onCreatePress}
-        activeOpacity={0.8}
-      >
-        <MaterialIcons name="add" size={20} color={UIColors.textWhite} />
-        <Text style={styles.ctaButtonText}>Create a Capsule</Text>
-      </TouchableOpacity>
+      {/* CTA Button with entry animation */}
+      <Reanimated.View style={ctaAnimatedStyle}>
+        <TouchableOpacity
+          style={styles.ctaButton}
+          onPress={onCreatePress}
+          activeOpacity={0.8}
+        >
+          <MaterialIcons name="add" size={20} color={UIColors.textWhite} />
+          <Text style={styles.ctaButtonText}>Create Time Capsule</Text>
+        </TouchableOpacity>
+      </Reanimated.View>
     </View>
   );
 };

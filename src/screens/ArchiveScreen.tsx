@@ -30,16 +30,18 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Animated,
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { UIColors } from '../constants/colors';
 import { Typography, Spacing, BorderRadius } from '../constants/theme';
 import { ArchiveItemCard, ArchiveItem } from '../components/ArchiveItemCard';
 import { EmptyArchiveState } from '../components/EmptyArchiveState';
-import { getOpenedCapsules, getImages } from '../services/databaseService';
+import { getOpenedCapsules, getImages, deleteCapsule } from '../services/databaseService';
 import { Capsule } from '../types/capsule';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Archive'>;
@@ -177,13 +179,120 @@ export const ArchiveScreen: React.FC = () => {
   }, [navigation]);
 
   /**
-   * Render list item
+   * Handle delete confirmation
+   * Shows confirmation dialog before deleting capsule
+   */
+  const handleDeletePress = useCallback((capsuleId: string) => {
+    Alert.alert(
+      'Delete Capsule',
+      'Are you sure you want to delete this capsule? This cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => handleDeleteConfirm(capsuleId),
+        },
+      ],
+      { cancelable: true }
+    );
+  }, []);
+
+  /**
+   * Handle delete confirmation
+   * Deletes capsule from database and file system, then updates UI
+   */
+  const handleDeleteConfirm = useCallback(
+    async (capsuleId: string) => {
+      console.log('[ArchiveScreen] Delete confirmed for capsule:', capsuleId);
+
+      try {
+        // Show loading state
+        setLoading(true);
+
+        // Delete from database and file system (atomic operation)
+        await deleteCapsule(capsuleId);
+
+        // Update UI - remove from state
+        setCapsules((prev) => prev.filter((c) => c.id !== capsuleId));
+
+        console.log('[ArchiveScreen] Capsule deleted successfully:', capsuleId);
+
+        // Show success feedback (optional - visual feedback from UI is enough)
+        // Alert.alert('Success', 'Capsule deleted successfully');
+      } catch (error) {
+        console.error('[ArchiveScreen] Delete failed:', error);
+
+        // Show error alert
+        Alert.alert(
+          'Delete Failed',
+          error instanceof Error ? error.message : 'Failed to delete capsule. Please try again.',
+          [{ text: 'OK' }]
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  /**
+   * Render swipeable delete action
+   */
+  const renderRightActions = useCallback(
+    (
+      progress: Animated.AnimatedInterpolation<number>,
+      dragX: Animated.AnimatedInterpolation<number>,
+      capsuleId: string
+    ) => {
+      const translateX = dragX.interpolate({
+        inputRange: [-80, 0],
+        outputRange: [0, 80],
+        extrapolate: 'clamp',
+      });
+
+      return (
+        <Animated.View
+          style={[
+            styles.deleteAction,
+            {
+              transform: [{ translateX }],
+            },
+          ]}
+        >
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => handleDeletePress(capsuleId)}
+            activeOpacity={0.7}
+          >
+            <MaterialIcons name="delete" size={24} color="white" />
+            <Text style={styles.deleteText}>Delete</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      );
+    },
+    [handleDeletePress]
+  );
+
+  /**
+   * Render list item with swipe-to-delete
    */
   const renderItem = useCallback(
     ({ item }: { item: ArchiveItem }) => (
-      <ArchiveItemCard item={item} onPress={() => handleCapsulePress(item.id)} />
+      <Swipeable
+        renderRightActions={(progress, dragX) =>
+          renderRightActions(progress, dragX, item.id)
+        }
+        overshootRight={false}
+        friction={2}
+      >
+        <ArchiveItemCard item={item} onPress={() => handleCapsulePress(item.id)} />
+      </Swipeable>
     ),
-    [handleCapsulePress]
+    [handleCapsulePress, renderRightActions]
   );
 
   /**
@@ -200,52 +309,57 @@ export const ArchiveScreen: React.FC = () => {
   const keyExtractor = useCallback((item: ArchiveItem) => item.id, []);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons name="arrow-back" size={24} color={UIColors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Archive</Text>
-        <View style={styles.headerRight} />
-      </View>
-
-      {/* Initial Loading State */}
-      {loading && capsules.length === 0 ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={UIColors.primary} />
-          <Text style={styles.loadingText}>Loading archive...</Text>
+    <GestureHandlerRootView style={styles.flex}>
+      <SafeAreaView style={styles.safeArea}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.7}
+          >
+            <MaterialIcons name="arrow-back" size={24} color={UIColors.textPrimary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Archive</Text>
+          <View style={styles.headerRight} />
         </View>
-      ) : (
-        /* Capsule List */
-        <FlatList
-          data={capsules}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          ListEmptyComponent={renderEmpty}
-          contentContainerStyle={
-            capsules.length === 0 ? styles.emptyContainer : styles.listContainer
-          }
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={UIColors.primary}
-              colors={[UIColors.primary]}
-            />
-          }
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </SafeAreaView>
+
+        {/* Initial Loading State */}
+        {loading && capsules.length === 0 ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={UIColors.primary} />
+            <Text style={styles.loadingText}>Loading archive...</Text>
+          </View>
+        ) : (
+          /* Capsule List */
+          <FlatList
+            data={capsules}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            ListEmptyComponent={renderEmpty}
+            contentContainerStyle={
+              capsules.length === 0 ? styles.emptyContainer : styles.listContainer
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={UIColors.primary}
+                colors={[UIColors.primary]}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
     backgroundColor: UIColors.surface,
@@ -290,6 +404,28 @@ const styles = StyleSheet.create({
   loadingText: {
     ...Typography.body,
     color: UIColors.textSecondary,
+  },
+  deleteAction: {
+    backgroundColor: UIColors.danger,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: Spacing.lg,
+    width: 80,
+    marginVertical: Spacing.sm,
+    borderTopRightRadius: BorderRadius.md,
+    borderBottomRightRadius: BorderRadius.md,
+  },
+  deleteButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    paddingHorizontal: Spacing.sm,
+  },
+  deleteText: {
+    color: 'white',
+    fontSize: Typography.bodySmall.fontSize,
+    fontWeight: '600',
+    marginTop: Spacing.xs,
   },
 });
 

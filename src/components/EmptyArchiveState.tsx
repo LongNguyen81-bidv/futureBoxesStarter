@@ -6,6 +6,7 @@
  *
  * Features:
  * - Floating animation for illustration
+ * - Entry animations (staggered fade-in)
  * - Clear messaging
  * - Optional call-to-action button to navigate Home
  */
@@ -19,6 +20,13 @@ import {
   Easing,
   TouchableOpacity,
 } from 'react-native';
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  withSpring,
+} from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons';
 import { UIColors } from '../constants/colors';
 import { Typography, Spacing, BorderRadius, Shadows } from '../constants/theme';
@@ -30,10 +38,19 @@ interface EmptyArchiveStateProps {
 export const EmptyArchiveState: React.FC<EmptyArchiveStateProps> = ({
   onGoHome,
 }) => {
-  // Float animation for the icon
+  // Float animation for the icon (legacy Animated for continuous loop)
   const floatAnim = useRef(new Animated.Value(0)).current;
 
+  // Entry animations (Reanimated for staggered fade-in)
+  const illustrationOpacity = useSharedValue(0);
+  const illustrationScale = useSharedValue(0.8);
+  const titleOpacity = useSharedValue(0);
+  const subtitleOpacity = useSharedValue(0);
+  const ctaOpacity = useSharedValue(0);
+  const ctaScale = useSharedValue(0.9);
+
   useEffect(() => {
+    // Float animation (continuous loop)
     const float = Animated.loop(
       Animated.sequence([
         Animated.timing(floatAnim, {
@@ -52,51 +69,93 @@ export const EmptyArchiveState: React.FC<EmptyArchiveStateProps> = ({
     );
     float.start();
 
+    // Entry animations (staggered)
+    illustrationOpacity.value = withTiming(1, { duration: 400 });
+    illustrationScale.value = withSpring(1, {
+      damping: 12,
+      stiffness: 100,
+    });
+    titleOpacity.value = withDelay(100, withTiming(1, { duration: 300 }));
+    subtitleOpacity.value = withDelay(200, withTiming(1, { duration: 300 }));
+    ctaOpacity.value = withDelay(300, withTiming(1, { duration: 300 }));
+    ctaScale.value = withDelay(
+      300,
+      withSpring(1, {
+        damping: 10,
+        stiffness: 100,
+      })
+    );
+
     return () => float.stop();
   }, [floatAnim]);
 
+  // Animated styles for entry animations
+  const illustrationAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: illustrationOpacity.value,
+    transform: [{ scale: illustrationScale.value }],
+  }));
+
+  const titleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+  }));
+
+  const subtitleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: subtitleOpacity.value,
+  }));
+
+  const ctaAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: ctaOpacity.value,
+    transform: [{ scale: ctaScale.value }],
+  }));
+
   return (
     <View style={styles.container}>
-      {/* Floating illustration */}
-      <Animated.View
-        style={[
-          styles.illustrationContainer,
-          {
-            transform: [{ translateY: floatAnim }],
-          },
-        ]}
-      >
-        <View style={styles.iconCircle}>
-          <MaterialIcons
-            name="inventory-2"
-            size={80}
-            color={UIColors.textTertiary}
-          />
-        </View>
-      </Animated.View>
-
-      {/* Title */}
-      <Text style={styles.title}>No opened capsules yet</Text>
-
-      {/* Subtitle */}
-      <Text style={styles.subtitle}>
-        When you open a time capsule, it will appear here.
-      </Text>
-
-      {/* Optional CTA Button */}
-      {onGoHome && (
-        <TouchableOpacity
-          style={styles.ctaButton}
-          onPress={onGoHome}
-          activeOpacity={0.8}
+      {/* Floating illustration with entry animation */}
+      <Reanimated.View style={illustrationAnimatedStyle}>
+        <Animated.View
+          style={[
+            styles.illustrationContainer,
+            {
+              transform: [{ translateY: floatAnim }],
+            },
+          ]}
         >
-          <MaterialIcons
-            name="home"
-            size={20}
-            color={UIColors.textSecondary}
-          />
-          <Text style={styles.ctaButtonText}>Go to Home</Text>
-        </TouchableOpacity>
+          <View style={styles.iconCircle}>
+            <MaterialIcons
+              name="inventory-2"
+              size={80}
+              color={UIColors.textTertiary}
+            />
+          </View>
+        </Animated.View>
+      </Reanimated.View>
+
+      {/* Title with entry animation */}
+      <Reanimated.Text style={[styles.title, titleAnimatedStyle]}>
+        No opened capsules yet
+      </Reanimated.Text>
+
+      {/* Subtitle with entry animation */}
+      <Reanimated.Text style={[styles.subtitle, subtitleAnimatedStyle]}>
+        When you open a time capsule, it will appear here for you to revisit.
+      </Reanimated.Text>
+
+      {/* Optional CTA Button with entry animation */}
+      {onGoHome && (
+        <Reanimated.View style={ctaAnimatedStyle}>
+          <TouchableOpacity
+            style={styles.ctaButton}
+            onPress={onGoHome}
+            activeOpacity={0.8}
+          >
+            <MaterialIcons
+              name="home"
+              size={20}
+              color={UIColors.textSecondary}
+            />
+            <Text style={styles.ctaButtonText}>Go to Home</Text>
+          </TouchableOpacity>
+        </Reanimated.View>
       )}
     </View>
   );

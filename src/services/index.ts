@@ -43,3 +43,11 @@ export {
   addNotificationResponseListener,
   hasNotificationPermissions,
 } from './notificationService';
+
+// Onboarding Service
+export {
+  isFirstLaunch,
+  completeOnboarding,
+  resetOnboarding,
+  getOnboardingStatus,
+} from './onboardingService';

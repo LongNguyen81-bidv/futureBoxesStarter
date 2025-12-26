@@ -8,6 +8,8 @@ export * from './CapsuleCard';
 export * from './EmptyState';
 export * from './FAB';
 export * from './LockSuccessModal';
+export * from './OnboardingSlide';
+export * from './OnboardingIllustration';
 
 export { default as CapsuleCard } from './CapsuleCard';
 export { default as EmptyState } from './EmptyState';

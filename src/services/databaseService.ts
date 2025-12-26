@@ -10,6 +10,7 @@
  * - Type-safe operations
  */
 
+import * as FileSystem from 'expo-file-system';
 import { getDatabase } from '../database/database';
 import {
   Capsule,
@@ -429,31 +430,68 @@ export const markCapsuleAsOpened = async (id: string): Promise<void> => {
 };
 
 /**
- * Delete capsule (only if status is 'opened')
+ * Delete capsule with full cleanup
+ * Atomic operation with transaction and rollback
+ * Deletes: images from file system, image records, reflection answer, capsule record
  */
 export const deleteCapsule = async (id: string): Promise<void> => {
-  try {
-    const db = await getDatabase();
+  const db = await getDatabase();
 
-    // Check status first
+  try {
+    // 1. Verify capsule exists and is opened
     const capsule = await getCapsuleById(id);
     if (!capsule) {
       throw new Error('Capsule not found');
     }
     if (capsule.status !== 'opened') {
-      throw new Error('Cannot delete locked capsule');
+      throw new Error('Can only delete opened capsules');
     }
 
-    // Delete images from filesystem
-    await deleteCapsuleImages(id);
+    // 2. Get all image records before deleting (for file cleanup)
+    const images = await getImages(id);
 
-    // Delete capsule (CASCADE will delete image records)
+    // 3. Start transaction for atomic operation
+    await db.execAsync('BEGIN TRANSACTION');
+
+    // 4. Delete database records
+    // Note: reflectionAnswer is a column in capsule table, not separate table
+    // Foreign key CASCADE will delete image records automatically
     await db.runAsync('DELETE FROM capsule WHERE id = ?', [id]);
 
-    console.log('[DatabaseService] Capsule deleted:', id);
+    // 5. Commit transaction - DB operations successful
+    await db.execAsync('COMMIT');
+
+    // 6. Delete image files from file system (after DB commit)
+    // Use best-effort approach - log warnings but don't fail
+    for (const image of images) {
+      try {
+        const fileInfo = await FileSystem.getInfoAsync(image.imagePath);
+        if (fileInfo.exists) {
+          await FileSystem.deleteAsync(image.imagePath, { idempotent: true });
+        }
+      } catch (err) {
+        console.warn('[DatabaseService] Failed to delete image file:', image.imagePath, err);
+        // Continue with other images even if one fails
+      }
+    }
+
+    // Also delete capsule directory
+    await deleteCapsuleImages(id);
+
+    console.log('[DatabaseService] Capsule deleted successfully:', id);
   } catch (error) {
+    // Rollback transaction on error
+    try {
+      await db.execAsync('ROLLBACK');
+      console.log('[DatabaseService] Transaction rolled back');
+    } catch (rollbackError) {
+      console.error('[DatabaseService] Rollback failed:', rollbackError);
+    }
+
     console.error('[DatabaseService] Failed to delete capsule:', error);
-    throw error;
+    throw new Error(
+      error instanceof Error ? error.message : 'Failed to delete capsule. Please try again.'
+    );
   }
 };
 
