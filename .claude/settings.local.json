@@ -19,7 +19,12 @@
       "Bash(git init:*)",
       "Bash(git remote add:*)",
       "Bash(git add:*)",
-      "Bash(del nul)"
+      "Bash(del nul)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(context7 react-native FlatList-props-rendering)",
+      "Bash(context7 react-native-gesture-handler swipeable:*)",
+      "Bash(npx @context7/cli react-native-reanimated useAnimatedStyle)"
     ]
   }
 }

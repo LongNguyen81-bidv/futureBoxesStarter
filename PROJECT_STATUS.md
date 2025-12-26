@@ -14,7 +14,7 @@
 ### → Current Phase
 - [ ] Implementation - In progress
   - [x] Project setup & dependencies
-  - Features: 7/14 completed (50%)
+  - Features: 8/14 completed (57%)
 
 ### Pending Phases
 - [ ] Testing & Completion
@@ -31,9 +31,9 @@
 - [ ] F7: Push Notification (Partially complete - basic scheduling in F4)
 - [x] F8: Open Capsule ✅ (Completed 2025-12-25)
 - [x] F9: Reflection Response ✅ (Completed 2025-12-25)
-- [ ] F11: Archive/History
+- [x] F11: Archive/History ✅ (Completed 2025-12-25)
 
-### Should Have (3 features)
+### Should Have (4 features)
 - [ ] F10: Celebration Effects
 - [ ] F12: Delete Opened Capsule
 - [ ] F13: Onboarding

@@ -16,9 +16,9 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { TypeSelectionScreen } from '../screens/TypeSelectionScreen';
 import { CreateCapsuleScreen } from '../screens/CreateCapsuleScreen';
 import { PreviewCapsuleScreen } from '../screens/PreviewCapsuleScreen';
-import { OpenCapsuleScreen } from '../screens/OpenCapsuleScreen';
+import { OpenCapsuleScreenContainer } from '../screens/OpenCapsuleScreenContainer';
 import { ReflectionScreen } from '../screens/ReflectionScreen';
-import { CelebrationPlaceholderScreen } from '../screens/CelebrationPlaceholderScreen';
+import { CelebrationScreen } from '../screens/CelebrationScreen';
 import { ArchiveScreen } from '../screens/ArchiveScreen';
 import { CapsuleType } from '../types/capsule';
 
@@ -37,7 +37,10 @@ export type RootStackParamList = {
     reflectionQuestion: string | null;
     unlockAt: Date;
   };
-  OpenCapsule: { capsuleId: string };
+  OpenCapsule: {
+    capsuleId: string;
+    fromArchive?: boolean; // Optional param to indicate navigation from Archive
+  };
   Reflection: {
     capsuleId: string;
     type: CapsuleType;
@@ -94,7 +97,7 @@ export const AppNavigator: React.FC = () => {
       />
       <Stack.Screen
         name="OpenCapsule"
-        component={OpenCapsuleScreen}
+        component={OpenCapsuleScreenContainer}
         options={{
           presentation: 'card',
         }}
@@ -108,7 +111,7 @@ export const AppNavigator: React.FC = () => {
       />
       <Stack.Screen
         name="Celebration"
-        component={CelebrationPlaceholderScreen}
+        component={CelebrationScreen}
         options={{
           presentation: 'card',
           gestureEnabled: false, // Prevent swipe back from Celebration
