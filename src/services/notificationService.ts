@@ -19,6 +19,8 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
@@ -111,9 +113,7 @@ export const scheduleNotification = async (
           type: capsule.type,
         },
       },
-      trigger: {
-        date: unlockDate,
-      },
+      trigger: { date: unlockDate } as any,
     });
 
     console.log('[NotificationService] Notification scheduled:', notificationId, 'for', unlockDate);
@@ -200,4 +200,14 @@ export const hasNotificationPermissions = async (): Promise<boolean> => {
     console.error('[NotificationService] Failed to check permissions:', error);
     return false;
   }
+};
+
+/**
+ * Schedule notification for a capsule (alias for scheduleNotification)
+ * Used by background task service
+ */
+export const scheduleNotificationForCapsule = async (
+  capsule: Capsule
+): Promise<string | null> => {
+  return scheduleNotification(capsule);
 };

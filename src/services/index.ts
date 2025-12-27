@@ -42,6 +42,7 @@ export {
   addNotificationReceivedListener,
   addNotificationResponseListener,
   hasNotificationPermissions,
+  scheduleNotificationForCapsule,
 } from './notificationService';
 
 // Onboarding Service
@@ -51,3 +52,10 @@ export {
   resetOnboarding,
   getOnboardingStatus,
 } from './onboardingService';
+
+// Background Task Service
+export {
+  registerBackgroundTask,
+  unregisterBackgroundTask,
+  getBackgroundTaskStatus,
+} from './backgroundTaskService';

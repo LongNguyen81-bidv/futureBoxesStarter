@@ -26,6 +26,8 @@ import {
   Alert,
   SafeAreaView,
   StatusBar,
+  AppState,
+  AppStateStatus,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -37,7 +39,7 @@ import { FAB } from '../components/FAB';
 import { UIColors } from '../constants/colors';
 import { Typography, Spacing, Grid } from '../constants/theme';
 import { formatCountdown } from './mockData';
-import { getUpcomingCapsules, updateCapsuleStatus } from '../services';
+import { getUpcomingCapsules, updateCapsuleStatus, updatePendingCapsules } from '../services';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -62,18 +64,13 @@ export const HomeScreen: React.FC = () => {
       // Get upcoming capsules from database
       const data = await getUpcomingCapsules();
 
-      // Convert unlockDate strings to timestamps for countdown
-      const capsulesList = data.map((capsule) => ({
-        ...capsule,
-        unlockAt: new Date(capsule.unlockDate).getTime(),
-      }));
-
-      setCapsules(capsulesList as any);
+      setCapsules(data);
 
       // Calculate initial countdowns
       const initialCountdowns: Record<string, string> = {};
-      capsulesList.forEach((capsule) => {
-        initialCountdowns[capsule.id] = formatCountdown(capsule.unlockAt);
+      data.forEach((capsule) => {
+        const unlockTimestamp = new Date(capsule.unlockDate).getTime();
+        initialCountdowns[capsule.id] = formatCountdown(unlockTimestamp);
       });
       setCountdowns(initialCountdowns);
     } catch (err) {
@@ -103,19 +100,70 @@ export const HomeScreen: React.FC = () => {
     }).start();
   }, [loadCapsules, fadeAnim]);
 
-  // Timer to update countdowns and check status
+  // App state handler - check for expired capsules when app resumes
   useEffect(() => {
+    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'active') {
+        console.log('[HomeScreen] App resumed - checking for expired capsules');
+
+        try {
+          // Batch update all expired capsules
+          const updatedCount = await updatePendingCapsules();
+
+          if (updatedCount > 0) {
+            console.log(`[HomeScreen] Updated ${updatedCount} expired capsule(s) on resume`);
+            // Reload capsules to reflect status changes
+            await loadCapsules();
+          } else {
+            // Still recalculate countdowns even if no status changed
+            const newCountdowns: Record<string, string> = {};
+            capsules.forEach((capsule) => {
+              const unlockTimestamp = new Date(capsule.unlockDate).getTime();
+              newCountdowns[capsule.id] = formatCountdown(unlockTimestamp);
+            });
+            setCountdowns(newCountdowns);
+          }
+        } catch (err) {
+          console.error('[HomeScreen] Failed to update capsules on resume:', err);
+        }
+      }
+    };
+
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      subscription.remove();
+    };
+  }, [loadCapsules, capsules]);
+
+  // Timer to update countdowns and check status (optimized intervals)
+  useEffect(() => {
+    // Determine optimal interval based on capsules
+    const hasUrgentCapsule = capsules.some((capsule) => {
+      const unlockTimestamp = new Date(capsule.unlockDate).getTime();
+      const timeRemaining = unlockTimestamp - Date.now();
+      const oneDayInMs = 24 * 60 * 60 * 1000;
+      return timeRemaining > 0 && timeRemaining < oneDayInMs;
+    });
+
+    // Use 1 second interval if any capsule < 1 day, else 1 minute
+    const intervalMs = hasUrgentCapsule ? 1000 : 60000;
+
+    console.log(
+      `[HomeScreen] Timer interval set to ${intervalMs / 1000}s (urgent: ${hasUrgentCapsule})`
+    );
+
     const interval = setInterval(async () => {
       const newCountdowns: Record<string, string> = {};
       let statusChanged = false;
 
       // Update countdowns and check for status changes
       for (const capsule of capsules) {
-        const unlockAt = (capsule as any).unlockAt;
-        newCountdowns[capsule.id] = formatCountdown(unlockAt);
+        const unlockTimestamp = new Date(capsule.unlockDate).getTime();
+        newCountdowns[capsule.id] = formatCountdown(unlockTimestamp);
 
         // Check if locked capsule should transition to ready
-        if (capsule.status === 'locked' && unlockAt <= Date.now()) {
+        if (capsule.status === 'locked' && unlockTimestamp <= Date.now()) {
           try {
             await updateCapsuleStatus(capsule.id, 'ready');
             statusChanged = true;
@@ -132,7 +180,7 @@ export const HomeScreen: React.FC = () => {
       if (statusChanged) {
         await loadCapsules();
       }
-    }, 1000); // Update every second for accuracy
+    }, intervalMs);
 
     return () => clearInterval(interval);
   }, [capsules, loadCapsules]);
@@ -141,7 +189,7 @@ export const HomeScreen: React.FC = () => {
   const handleCapsuleTap = (capsule: Capsule) => {
     if (capsule.status === 'locked') {
       // Show locked message
-      const unlockDate = new Date(capsule.unlockAt).toLocaleDateString();
+      const unlockDate = new Date(capsule.unlockDate).toLocaleDateString();
       Alert.alert(
         'Capsule Locked',
         `This capsule is still locked. Come back on ${unlockDate}.`,

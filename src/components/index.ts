@@ -10,6 +10,7 @@ export * from './FAB';
 export * from './LockSuccessModal';
 export * from './OnboardingSlide';
 export * from './OnboardingIllustration';
+export * from './InAppNotificationBanner';
 
 export { default as CapsuleCard } from './CapsuleCard';
 export { default as EmptyState } from './EmptyState';
