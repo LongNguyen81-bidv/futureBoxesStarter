@@ -56,10 +56,10 @@ export const requestNotificationPermissions = async (): Promise<boolean> => {
  */
 const getNotificationTitle = (type: CapsuleType): string => {
   const titles = {
-    emotion: 'Your Emotion capsule is ready!',
-    goal: 'Your Goal capsule is ready!',
-    memory: 'Your Memory capsule is ready!',
-    decision: 'Your Decision capsule is ready!',
+    emotion: 'Viên nang Cảm xúc đã sẵn sàng!',
+    goal: 'Viên nang Mục tiêu đã sẵn sàng!',
+    memory: 'Viên nang Kỷ niệm đã sẵn sàng!',
+    decision: 'Viên nang Quyết định đã sẵn sàng!',
   };
   return titles[type];
 };
@@ -69,10 +69,10 @@ const getNotificationTitle = (type: CapsuleType): string => {
  */
 const getNotificationBody = (type: CapsuleType): string => {
   const bodies = {
-    emotion: 'Tap to see how you felt and reflect on your emotions.',
-    goal: 'Tap to check your progress and see if you achieved your goal.',
-    memory: 'Tap to relive this special moment from the past.',
-    decision: 'Tap to reflect on the decision you made.',
+    emotion: 'Chạm để xem cảm xúc của bạn và suy ngẫm về nó.',
+    goal: 'Chạm để kiểm tra tiến độ và xem bạn đã đạt mục tiêu chưa.',
+    memory: 'Chạm để sống lại khoảnh khắc đặc biệt này.',
+    decision: 'Chạm để suy ngẫm về quyết định bạn đã đưa ra.',
   };
   return bodies[type];
 };

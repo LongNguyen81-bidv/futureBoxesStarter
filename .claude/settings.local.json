@@ -25,7 +25,21 @@
       "Bash(context7 react-native FlatList-props-rendering)",
       "Bash(context7 react-native-gesture-handler swipeable:*)",
       "Bash(npx @context7/cli react-native-reanimated useAnimatedStyle)",
-      "Bash(npx expo install:*)"
+      "Bash(npx expo install:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm start)",
+      "Bash(npx expo start:*)",
+      "Bash(ipconfig:*)",
+      "Bash(timeout /t 1)",
+      "Bash(powershell -Command:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(npm test:*)",
+      "Bash(npx jest --clearCache)",
+      "Bash(npx expo-doctor:*)",
+      "Bash(npx expo prebuild:*)",
+      "Bash(timeout /t 3)"
     ]
   }
 }

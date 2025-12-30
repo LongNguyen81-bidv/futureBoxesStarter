@@ -246,21 +246,21 @@ export const LockSuccessModal: React.FC<LockSuccessModalProps> = ({
 
           {/* Success message */}
           <Animated.View style={[styles.messageContainer, messageAnimatedStyle]}>
-            <Text style={styles.title}>Your capsule is locked!</Text>
-            <Text style={styles.subtitle}>See you on</Text>
+            <Text style={styles.title}>Viên nang đã được khóa!</Text>
+            <Text style={styles.subtitle}>Hẹn gặp lại vào</Text>
             <Text style={[styles.date, { color: typeColor.primary }]}>
               {formattedDate}
             </Text>
             <View style={styles.typeBadge}>
               <Text style={styles.typeBadgeText}>
-                {typeLabel} Capsule
+                Viên nang {typeLabel}
               </Text>
             </View>
           </Animated.View>
 
           {/* Tap hint */}
           <Animated.View style={[styles.hintContainer, messageAnimatedStyle]}>
-            <Text style={styles.hintText}>Tap anywhere to continue</Text>
+            <Text style={styles.hintText}>Chạm vào bất kỳ đâu để tiếp tục</Text>
           </Animated.View>
         </View>
       </Pressable>

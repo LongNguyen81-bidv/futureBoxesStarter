@@ -69,24 +69,24 @@ export const CelebrationPlaceholderScreen: React.FC = () => {
   // Get message based on answer
   const getMessage = (): string => {
     if (answer === 'memory') {
-      return 'Thank you for preserving this beautiful memory.';
+      return 'Cảm ơn bạn đã lưu giữ kỷ niệm tuyệt vời này.';
     }
     if (answer === 'yes') {
-      return 'Amazing! Keep up the great work!';
+      return 'Tuyệt vời! Hãy tiếp tục phát huy!';
     }
     if (answer === 'no') {
-      return "That's okay. Every experience teaches us something.";
+      return 'Không sao. Mỗi trải nghiệm đều dạy chúng ta điều gì đó.';
     }
     if (answer === '5' || answer === '4') {
-      return 'Excellent decision! You made the right choice.';
+      return 'Quyết định tuyệt vời! Bạn đã chọn đúng.';
     }
     if (answer === '3') {
-      return "It's all part of the journey.";
+      return 'Tất cả đều là một phần của hành trình.';
     }
     if (answer === '1' || answer === '2') {
-      return 'Every decision is a learning opportunity.';
+      return 'Mỗi quyết định đều là cơ hội để học hỏi.';
     }
-    return 'Thank you for reflecting!';
+    return 'Cảm ơn bạn đã suy ngẫm!';
   };
 
   const handleViewArchive = () => {
@@ -117,7 +117,7 @@ export const CelebrationPlaceholderScreen: React.FC = () => {
         </View>
 
         {/* Title */}
-        <Text style={styles.title}>Reflection Saved!</Text>
+        <Text style={styles.title}>Đã lưu suy ngẫm!</Text>
 
         {/* Message */}
         <Text style={styles.message}>{getMessage()}</Text>
@@ -125,7 +125,7 @@ export const CelebrationPlaceholderScreen: React.FC = () => {
         {/* Answer Summary (skip for memory type) */}
         {answer !== 'memory' && (
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryLabel}>Your answer:</Text>
+            <Text style={styles.summaryLabel}>Câu trả lời của bạn:</Text>
             <Text
               style={[
                 styles.summaryValue,
@@ -142,7 +142,7 @@ export const CelebrationPlaceholderScreen: React.FC = () => {
         )}
 
         {/* Capsule ID (for debugging) */}
-        <Text style={styles.debugText}>Capsule: {capsuleId.slice(0, 8)}...</Text>
+        <Text style={styles.debugText}>Viên nang: {capsuleId.slice(0, 8)}...</Text>
       </View>
 
       {/* Action Buttons */}
@@ -158,7 +158,7 @@ export const CelebrationPlaceholderScreen: React.FC = () => {
           ]}
         >
           <MaterialCommunityIcons name="archive" size={20} color="#FFFFFF" />
-          <Text style={styles.primaryButtonText}>View Archive</Text>
+          <Text style={styles.primaryButtonText}>Xem Lưu trữ</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -175,7 +175,7 @@ export const CelebrationPlaceholderScreen: React.FC = () => {
               },
             ]}
           >
-            Go Home
+            Về Trang chủ
           </Text>
         </TouchableOpacity>
       </View>

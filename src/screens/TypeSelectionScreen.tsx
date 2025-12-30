@@ -37,26 +37,26 @@ type NavigationProp = StackNavigationProp<RootStackParamList, 'TypeSelection'>;
 const CAPSULE_TYPES = [
   {
     type: 'emotion' as CapsuleType,
-    title: 'Emotion',
-    description: 'Capture how you feel right now',
+    title: 'Cảm xúc',
+    description: 'Ghi lại cảm xúc bạn đang có',
     icon: 'heart' as keyof typeof MaterialCommunityIcons.glyphMap,
   },
   {
     type: 'goal' as CapsuleType,
-    title: 'Goal',
-    description: 'Set a goal and check back later',
+    title: 'Mục tiêu',
+    description: 'Đặt mục tiêu và kiểm tra sau',
     icon: 'flag-checkered' as keyof typeof MaterialCommunityIcons.glyphMap,
   },
   {
     type: 'memory' as CapsuleType,
-    title: 'Memory',
-    description: 'Preserve a special moment',
+    title: 'Kỷ niệm',
+    description: 'Lưu giữ khoảnh khắc đặc biệt',
     icon: 'camera' as keyof typeof MaterialCommunityIcons.glyphMap,
   },
   {
     type: 'decision' as CapsuleType,
-    title: 'Decision',
-    description: 'Record an important decision',
+    title: 'Quyết định',
+    description: 'Ghi nhận quyết định quan trọng',
     icon: 'scale-balance' as keyof typeof MaterialCommunityIcons.glyphMap,
   },
 ];
@@ -125,7 +125,7 @@ export const TypeSelectionScreen: React.FC = () => {
             color={UIColors.textPrimary}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Select Type</Text>
+        <Text style={styles.headerTitle}>Chọn loại</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -136,7 +136,7 @@ export const TypeSelectionScreen: React.FC = () => {
       >
         {/* Instruction Text */}
         <Text style={styles.instruction}>
-          Choose what kind of time capsule you want to create
+          Chọn loại viên nang thời gian bạn muốn tạo
         </Text>
 
         {/* Type Cards */}
@@ -169,7 +169,7 @@ export const TypeSelectionScreen: React.FC = () => {
           disabled={!selectedType}
           activeOpacity={0.9}
         >
-          <Text style={styles.continueButtonText}>Continue</Text>
+          <Text style={styles.continueButtonText}>Tiếp tục</Text>
         </AnimatedTouchable>
       </View>
     </SafeAreaView>

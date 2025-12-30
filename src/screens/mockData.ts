@@ -10,19 +10,19 @@
 import type { Capsule } from '../types/capsule';
 
 // Helper to create date in future
-const createFutureDate = (days: number, hours: number = 0, minutes: number = 0): number => {
+const createFutureDate = (days: number, hours: number = 0, minutes: number = 0): string => {
   const date = new Date();
   date.setDate(date.getDate() + days);
   date.setHours(date.getHours() + hours);
   date.setMinutes(date.getMinutes() + minutes);
-  return date.getTime();
+  return date.toISOString();
 };
 
 // Helper to create past date
-const createPastDate = (daysAgo: number): number => {
+const createPastDate = (daysAgo: number): string => {
   const date = new Date();
   date.setDate(date.getDate() - daysAgo);
-  return date.getTime();
+  return date.toISOString();
 };
 
 // Mock capsules with different states
@@ -32,13 +32,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-1',
     type: 'emotion',
     status: 'ready',
-    content: 'Feeling excited about starting this new project! Hope future me has achieved the goals.',
-    reflectionQuestion: 'Did I complete the project successfully?',
+    content: 'Đang rất hào hứng với dự án mới này! Hy vọng bản thân tương lai đã đạt được mục tiêu.',
+    reflectionQuestion: 'Bạn đã hoàn thành dự án thành công chưa?',
+    reflectionType: 'yes_no',
     reflectionAnswer: null,
     createdAt: createPastDate(7),
-    unlockAt: Date.now() - 1000, // Already passed
+    unlockDate: new Date(Date.now() - 1000).toISOString(), // Already passed
     openedAt: null,
-    updatedAt: Date.now(),
   },
 
   // Capsule 2: Locked, 3 days remaining (Goal type)
@@ -46,13 +46,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-2',
     type: 'goal',
     status: 'locked',
-    content: 'I want to lose 5kg in the next 3 months. Let\'s see if I can do it!',
-    reflectionQuestion: 'Did you achieve your weight loss goal?',
+    content: 'Mình muốn giảm 5kg trong 3 tháng tới. Xem mình có làm được không nhé!',
+    reflectionQuestion: 'Bạn đã đạt được mục tiêu giảm cân chưa?',
+    reflectionType: 'yes_no',
     reflectionAnswer: null,
     createdAt: createPastDate(2),
-    unlockAt: createFutureDate(3, 5, 30),
+    unlockDate: createFutureDate(3, 5, 30),
     openedAt: null,
-    updatedAt: Date.now(),
   },
 
   // Capsule 3: Locked, 1 week remaining (Memory type)
@@ -60,13 +60,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-3',
     type: 'memory',
     status: 'locked',
-    content: 'First day at my new job! Everyone is so friendly. Can\'t wait to see how things turn out.',
+    content: 'Ngày đầu tiên đi làm ở công ty mới! Mọi người thân thiện quá. Rất mong chờ xem mọi thứ sẽ ra sao.',
     reflectionQuestion: null, // Memory type doesn't have reflection
+    reflectionType: null,
     reflectionAnswer: null,
     createdAt: createPastDate(5),
-    unlockAt: createFutureDate(7, 2, 0),
+    unlockDate: createFutureDate(7, 2, 0),
     openedAt: null,
-    updatedAt: Date.now(),
   },
 
   // Capsule 4: Locked, less than 1 day (Decision type)
@@ -74,13 +74,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-4',
     type: 'decision',
     status: 'locked',
-    content: 'Decided to invest in crypto. This could either be brilliant or terrible!',
-    reflectionQuestion: 'Was this investment decision wise?',
+    content: 'Quyết định đầu tư vào crypto. Có thể là xuất sắc hoặc thảm họa!',
+    reflectionQuestion: 'Quyết định đầu tư này có sáng suốt không?',
+    reflectionType: 'rating',
     reflectionAnswer: null,
     createdAt: createPastDate(1),
-    unlockAt: createFutureDate(0, 12, 30),
+    unlockDate: createFutureDate(0, 12, 30),
     openedAt: null,
-    updatedAt: Date.now(),
   },
 
   // Capsule 5: Locked, 2 months remaining (Emotion type)
@@ -88,13 +88,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-5',
     type: 'emotion',
     status: 'locked',
-    content: 'Feeling nervous about the presentation tomorrow. Hope I nail it!',
-    reflectionQuestion: 'Did the presentation go well?',
+    content: 'Hơi lo lắng về bài thuyết trình ngày mai. Hy vọng mình sẽ làm tốt!',
+    reflectionQuestion: 'Bài thuyết trình có diễn ra tốt đẹp không?',
+    reflectionType: 'yes_no',
     reflectionAnswer: null,
     createdAt: createPastDate(3),
-    unlockAt: createFutureDate(60, 0, 0),
+    unlockDate: createFutureDate(60, 0, 0),
     openedAt: null,
-    updatedAt: Date.now(),
   },
 
   // Capsule 6: Locked, 1 year remaining (Goal type)
@@ -102,13 +102,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-6',
     type: 'goal',
     status: 'locked',
-    content: 'New Year resolution: Learn to play guitar. Let\'s see if I stick with it!',
-    reflectionQuestion: 'Can you play guitar now?',
+    content: 'Mục tiêu năm mới: Học chơi guitar. Xem mình có kiên trì được không!',
+    reflectionQuestion: 'Bây giờ bạn đã biết chơi guitar chưa?',
+    reflectionType: 'yes_no',
     reflectionAnswer: null,
     createdAt: createPastDate(10),
-    unlockAt: createFutureDate(365, 0, 0),
+    unlockDate: createFutureDate(365, 0, 0),
     openedAt: null,
-    updatedAt: Date.now(),
   },
 
   // Extra capsule (for testing "only 6 shown" behavior)
@@ -116,13 +116,13 @@ export const MOCK_CAPSULES: Capsule[] = [
     id: 'mock-7',
     type: 'decision',
     status: 'locked',
-    content: 'Should not appear on Home screen (7th capsule)',
-    reflectionQuestion: 'This should not be visible',
+    content: 'Không xuất hiện trên màn hình Home (capsule thứ 7)',
+    reflectionQuestion: 'Đây không nên hiển thị',
+    reflectionType: 'rating',
     reflectionAnswer: null,
     createdAt: createPastDate(1),
-    unlockAt: createFutureDate(400, 0, 0),
+    unlockDate: createFutureDate(400, 0, 0),
     openedAt: null,
-    updatedAt: Date.now(),
   },
 ];
 
@@ -130,7 +130,7 @@ export const MOCK_CAPSULES: Capsule[] = [
 export const getUpcomingMockCapsules = (): Capsule[] => {
   return MOCK_CAPSULES
     .filter((c) => c.status === 'locked' || c.status === 'ready')
-    .sort((a, b) => a.unlockAt - b.unlockAt)
+    .sort((a, b) => new Date(a.unlockDate).getTime() - new Date(b.unlockDate).getTime())
     .slice(0, 6);
 };
 
@@ -141,7 +141,7 @@ export const formatCountdown = (unlockAt: number): string => {
 
   // Already ready
   if (diff <= 0) {
-    return 'Ready!';
+    return 'Sẵn sàng!';
   }
 
   const seconds = Math.floor(diff / 1000);

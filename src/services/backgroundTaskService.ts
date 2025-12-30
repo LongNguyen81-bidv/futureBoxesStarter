@@ -23,41 +23,48 @@ const BACKGROUND_FETCH_TASK = 'capsule-timer-background-task';
 /**
  * Define the background task
  * This task checks for expired capsules and updates their status
+ *
+ * Note: Background tasks are not supported in Expo Go
+ * This will only work in development builds or standalone apps
  */
-TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
-  try {
-    console.log('[BackgroundTask] Running capsule timer check...');
-    const now = Date.now();
+try {
+  TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
+    try {
+      console.log('[BackgroundTask] Running capsule timer check...');
+      const now = Date.now();
 
-    // Update all expired capsules from locked to ready
-    const updatedCount = await updatePendingCapsules();
+      // Update all expired capsules from locked to ready
+      const updatedCount = await updatePendingCapsules();
 
-    if (updatedCount > 0) {
-      console.log(`[BackgroundTask] Updated ${updatedCount} capsule(s) to ready`);
+      if (updatedCount > 0) {
+        console.log(`[BackgroundTask] Updated ${updatedCount} capsule(s) to ready`);
 
-      // Get newly ready capsules to send notifications
-      const capsulesReadyNow = await getCapsulesToNotify();
+        // Get newly ready capsules to send notifications
+        const capsulesReadyNow = await getCapsulesToNotify();
 
-      // Schedule notifications for newly ready capsules
-      for (const capsule of capsulesReadyNow) {
-        try {
-          await scheduleNotificationForCapsule(capsule);
-          console.log(`[BackgroundTask] Notification scheduled for capsule: ${capsule.id}`);
-        } catch (err) {
-          console.error(`[BackgroundTask] Failed to schedule notification for ${capsule.id}:`, err);
+        // Schedule notifications for newly ready capsules
+        for (const capsule of capsulesReadyNow) {
+          try {
+            await scheduleNotificationForCapsule(capsule);
+            console.log(`[BackgroundTask] Notification scheduled for capsule: ${capsule.id}`);
+          } catch (err) {
+            console.error(`[BackgroundTask] Failed to schedule notification for ${capsule.id}:`, err);
+          }
         }
+      } else {
+        console.log('[BackgroundTask] No capsules to update');
       }
-    } else {
-      console.log('[BackgroundTask] No capsules to update');
-    }
 
-    // Return success with new data status
-    return BackgroundFetch.BackgroundFetchResult.NewData;
-  } catch (error) {
-    console.error('[BackgroundTask] Failed to update capsules:', error);
-    return BackgroundFetch.BackgroundFetchResult.Failed;
-  }
-});
+      // Return success with new data status
+      return BackgroundFetch.BackgroundFetchResult.NewData;
+    } catch (error) {
+      console.error('[BackgroundTask] Failed to update capsules:', error);
+      return BackgroundFetch.BackgroundFetchResult.Failed;
+    }
+  });
+} catch (error) {
+  console.warn('[BackgroundTask] Failed to define task (normal in Expo Go):', error);
+}
 
 /**
  * Register background fetch task

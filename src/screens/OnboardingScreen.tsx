@@ -31,7 +31,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { OnboardingSlide, OnboardingSlideData } from '../components/OnboardingSlide';
 import { Colors } from '../../constants/Colors';
-import { Typography, Spacing, BorderRadius, TouchTarget } from '../../constants/theme';
+import { Typography, Spacing, BorderRadius, TouchTarget } from '../constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -40,26 +40,26 @@ const SLIDES: OnboardingSlideData[] = [
   {
     id: 0,
     type: 'welcome',
-    title: 'Welcome to FutureBoxes',
-    subtitle: 'Send messages to your future self',
+    title: 'Chào mừng đến FutureBoxes',
+    subtitle: 'Gửi tin nhắn cho chính bạn trong tương lai',
   },
   {
     id: 1,
     type: 'create',
-    title: 'Capture the Moment',
-    subtitle: 'Write your thoughts, add photos, and set a question for reflection',
+    title: 'Ghi lại khoảnh khắc',
+    subtitle: 'Viết suy nghĩ, thêm ảnh và đặt câu hỏi để suy ngẫm',
   },
   {
     id: 2,
     type: 'wait',
-    title: 'Lock It Away',
-    subtitle: "Your capsule is sealed. No peeking until the unlock date!",
+    title: 'Khóa lại',
+    subtitle: 'Viên nang của bạn đã được niêm phong. Không được nhìn trộm cho đến ngày mở khóa!',
   },
   {
     id: 3,
     type: 'reflect',
-    title: 'Open & Reflect',
-    subtitle: "When time comes, open your capsule and see how much you've grown",
+    title: 'Mở và suy ngẫm',
+    subtitle: 'Khi đến lúc, hãy mở viên nang và xem bạn đã trưởng thành như thế nào',
   },
 ];
 
@@ -131,7 +131,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           onPress={handleSkip}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={styles.skipText}>Bỏ qua</Text>
         </TouchableOpacity>
       )}
 
@@ -219,7 +219,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
               isFirstSlide && styles.navigationButtonTextHidden,
             ]}
           >
-            Back
+            Quay lại
           </Text>
         </TouchableOpacity>
 
@@ -229,7 +229,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }
           onPress={handleNext}
         >
           <Text style={[styles.navigationButtonText, styles.nextButtonText]}>
-            {isLastSlide ? 'Get Started' : 'Next'}
+            {isLastSlide ? 'Bắt đầu' : 'Tiếp theo'}
           </Text>
         </TouchableOpacity>
       </View>

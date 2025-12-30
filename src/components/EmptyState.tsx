@@ -130,12 +130,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ onCreatePress }) => {
 
       {/* Title with entry animation */}
       <Reanimated.Text style={[styles.title, titleAnimatedStyle]}>
-        Create your first capsule
+        Tạo viên nang đầu tiên
       </Reanimated.Text>
 
       {/* Subtitle with entry animation */}
       <Reanimated.Text style={[styles.subtitle, subtitleAnimatedStyle]}>
-        Send a message to your future self. What will you want to remember?
+        Gửi thông điệp đến tương lai của bạn. Bạn muốn nhớ điều gì?
       </Reanimated.Text>
 
       {/* CTA Button with entry animation */}
@@ -146,7 +146,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ onCreatePress }) => {
           activeOpacity={0.8}
         >
           <MaterialIcons name="add" size={20} color={UIColors.textWhite} />
-          <Text style={styles.ctaButtonText}>Create Time Capsule</Text>
+          <Text style={styles.ctaButtonText}>Tạo viên nang thời gian</Text>
         </TouchableOpacity>
       </Reanimated.View>
     </View>

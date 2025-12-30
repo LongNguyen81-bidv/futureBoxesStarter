@@ -28,7 +28,7 @@ export const ImagePickerSection: React.FC<ImagePickerSectionProps> = ({
 }) => {
   const handleAddImage = async () => {
     if (images.length >= maxImages) {
-      Alert.alert('Maximum reached', `You can only add up to ${maxImages} images.`);
+      Alert.alert('Đã đạt giới hạn', `Bạn chỉ có thể thêm tối đa ${maxImages} ảnh.`);
       return;
     }
 
@@ -38,9 +38,9 @@ export const ImagePickerSection: React.FC<ImagePickerSectionProps> = ({
 
       if (status !== 'granted') {
         Alert.alert(
-          'Permission required',
-          'Please allow access to your photo library to add images.',
-          [{ text: 'OK' }]
+          'Cần cấp quyền',
+          'Vui lòng cho phép truy cập thư viện ảnh để thêm ảnh.',
+          [{ text: 'Đồng ý' }]
         );
         return;
       }
@@ -59,7 +59,7 @@ export const ImagePickerSection: React.FC<ImagePickerSectionProps> = ({
       }
     } catch (error) {
       console.error('Image picker error:', error);
-      Alert.alert('Error', 'Failed to select image. Please try again.');
+      Alert.alert('Lỗi', 'Không thể chọn ảnh. Vui lòng thử lại.');
     }
   };
 
@@ -70,7 +70,7 @@ export const ImagePickerSection: React.FC<ImagePickerSectionProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Add Photos (optional)</Text>
+      <Text style={styles.label}>Thêm ảnh (tùy chọn)</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -103,7 +103,7 @@ export const ImagePickerSection: React.FC<ImagePickerSectionProps> = ({
 
       {/* Helper text */}
       <Text style={styles.helperText}>
-        {images.length}/{maxImages} images
+        {images.length}/{maxImages} ảnh
       </Text>
     </View>
   );

@@ -102,9 +102,9 @@ export const StarRating: React.FC<StarRatingProps> = ({
 
       {/* Labels Row */}
       <View style={styles.labelsRow}>
-        <Text style={[styles.label, { color: UIColors.danger }]}>Bad</Text>
-        <Text style={[styles.label, { color: UIColors.warning }]}>Neutral</Text>
-        <Text style={[styles.label, { color: UIColors.success }]}>Great</Text>
+        <Text style={[styles.label, { color: UIColors.danger }]}>Tệ</Text>
+        <Text style={[styles.label, { color: UIColors.warning }]}>Bình thường</Text>
+        <Text style={[styles.label, { color: UIColors.success }]}>Tuyệt vời</Text>
       </View>
     </View>
   );

@@ -38,10 +38,10 @@ const TYPE_ICONS: Record<string, keyof typeof MaterialIcons.glyphMap> = {
 
 // Type names mapping
 const TYPE_NAMES: Record<string, string> = {
-  emotion: 'Emotion',
-  goal: 'Goal',
-  memory: 'Memory',
-  decision: 'Decision',
+  emotion: 'Cảm xúc',
+  goal: 'Mục tiêu',
+  memory: 'Kỷ niệm',
+  decision: 'Quyết định',
 };
 
 export interface ArchiveItem {
@@ -80,17 +80,17 @@ export const ArchiveItemCard: React.FC<ArchiveItemCardProps> = ({
   if (diffDays >= 365) {
     const years = Math.floor(diffDays / 365);
     const months = Math.floor((diffDays % 365) / 30);
-    timeLocked = `After ${years}y ${months}mo`;
+    timeLocked = `Sau ${years} năm ${months} tháng`;
   } else if (diffDays >= 30) {
     const months = Math.floor(diffDays / 30);
     const days = diffDays % 30;
-    timeLocked = `After ${months}mo ${days}d`;
+    timeLocked = `Sau ${months} tháng ${days} ngày`;
   } else if (diffDays >= 7) {
     const weeks = Math.floor(diffDays / 7);
     const days = diffDays % 7;
-    timeLocked = `After ${weeks}w ${days}d`;
+    timeLocked = `Sau ${weeks} tuần ${days} ngày`;
   } else {
-    timeLocked = `After ${diffDays} days`;
+    timeLocked = `Sau ${diffDays} ngày`;
   }
 
   // Truncate content for preview
@@ -131,7 +131,7 @@ export const ArchiveItemCard: React.FC<ArchiveItemCardProps> = ({
         </View>
         <View style={styles.datesContainer}>
           <Text style={styles.dateText}>
-            <Text style={styles.dateLabel}>Created: </Text>
+            <Text style={styles.dateLabel}>Tạo: </Text>
             {createdDate}
           </Text>
         </View>
@@ -176,7 +176,7 @@ export const ArchiveItemCard: React.FC<ArchiveItemCardProps> = ({
             color={UIColors.textSecondary}
           />
           <Text style={styles.openedText}>
-            Opened: {openedDate} ({timeLocked})
+            Mở: {openedDate} ({timeLocked})
           </Text>
         </View>
       </View>

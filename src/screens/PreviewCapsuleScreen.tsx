@@ -64,15 +64,15 @@ export const PreviewCapsuleScreen: React.FC = () => {
 
   const handleLock = () => {
     Alert.alert(
-      'Lock Capsule?',
-      'Once locked, you cannot view, edit, or delete this capsule until the unlock date.',
+      'Khóa viên nang?',
+      'Sau khi khóa, bạn không thể xem, chỉnh sửa hoặc xóa viên nang này cho đến ngày mở khóa.',
       [
         {
-          text: 'Cancel',
+          text: 'Hủy',
           style: 'cancel',
         },
         {
-          text: 'Lock',
+          text: 'Khóa',
           style: 'default',
           onPress: handleLockConfirmed,
         },
@@ -123,8 +123,8 @@ export const PreviewCapsuleScreen: React.FC = () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
 
       Alert.alert(
-        'Failed to Lock Capsule',
-        error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.',
+        'Không thể khóa viên nang',
+        error instanceof Error ? error.message : 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.',
         [{ text: 'OK' }]
       );
     } finally {
@@ -152,7 +152,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
             color={loading ? UIColors.textDisabled : UIColors.textPrimary}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Preview Capsule</Text>
+        <Text style={styles.headerTitle}>Xem trước viên nang</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -177,13 +177,13 @@ export const PreviewCapsuleScreen: React.FC = () => {
             color={typeColor.primary}
           />
           <Text style={[styles.typeBadgeText, { color: typeColor.primary }]}>
-            {typeLabel} Capsule
+            Viên nang {typeLabel}
           </Text>
         </View>
 
         {/* Content Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Your Message</Text>
+          <Text style={styles.sectionLabel}>Thông điệp của bạn</Text>
           <View style={styles.contentBox}>
             <Text style={styles.contentText}>{content}</Text>
           </View>
@@ -193,7 +193,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
         {images.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>
-              Photos ({images.length}/3)
+              Hình ảnh ({images.length}/3)
             </Text>
             <ScrollView
               horizontal
@@ -216,7 +216,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
         {/* Reflection Question */}
         {reflectionQuestion && (
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Question for Future You</Text>
+            <Text style={styles.sectionLabel}>Câu hỏi cho tương lai</Text>
             <View style={styles.reflectionBox}>
               <Text style={styles.reflectionText}>{reflectionQuestion}</Text>
             </View>
@@ -225,7 +225,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
 
         {/* Unlock Date */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Opens On</Text>
+          <Text style={styles.sectionLabel}>Mở vào ngày</Text>
           <View style={styles.dateBox}>
             <MaterialCommunityIcons
               name="calendar-clock"
@@ -245,7 +245,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
 
         {/* Created Date */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Created On</Text>
+          <Text style={styles.sectionLabel}>Tạo vào ngày</Text>
           <View style={styles.createdBox}>
             <Text style={styles.createdText}>
               {format(new Date(), 'EEEE, MMMM dd, yyyy \'at\' h:mm a')}
@@ -266,7 +266,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
             size={20}
             color={UIColors.primary}
           />
-          <Text style={styles.backToEditText}>Edit</Text>
+          <Text style={styles.backToEditText}>Chỉnh sửa</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -283,7 +283,7 @@ export const PreviewCapsuleScreen: React.FC = () => {
                 size={20}
                 color={UIColors.textWhite}
               />
-              <Text style={styles.lockButtonText}>Lock Capsule</Text>
+              <Text style={styles.lockButtonText}>Khóa viên nang</Text>
             </>
           )}
         </TouchableOpacity>

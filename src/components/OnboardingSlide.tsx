@@ -16,7 +16,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { OnboardingIllustration } from './OnboardingIllustration';
 import { Colors } from '../../constants/Colors';
-import { Typography, Spacing } from '../../constants/theme';
+import { Typography, Spacing } from '../constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 

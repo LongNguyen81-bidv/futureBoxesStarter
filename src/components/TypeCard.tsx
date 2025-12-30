@@ -79,6 +79,7 @@ export const TypeCard: React.FC<TypeCardProps> = ({
       onPressOut={handlePressOut}
       onPress={handlePress}
       style={[animatedCardStyle, selectedAnimatedStyle]}
+      testID="type-card"
     >
       <View
         style={[

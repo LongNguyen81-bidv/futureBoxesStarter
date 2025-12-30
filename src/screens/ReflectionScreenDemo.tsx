@@ -39,45 +39,45 @@ interface DemoScenario {
 const demoScenarios: DemoScenario[] = [
   {
     id: '1',
-    title: 'Emotion - Anxiety',
+    title: 'Cảm xúc - Lo lắng',
     type: 'emotion',
-    question: 'Did this feeling of anxiety pass?',
-    description: 'Yes/No buttons for emotion reflection',
+    question: 'Cảm giác lo lắng này đã qua chưa?',
+    description: 'Nút Có/Không cho suy ngẫm cảm xúc',
   },
   {
     id: '2',
-    title: 'Emotion - Happiness',
+    title: 'Cảm xúc - Hạnh phúc',
     type: 'emotion',
-    question: 'Are you still this happy?',
-    description: 'Yes/No buttons for positive emotion',
+    question: 'Bạn vẫn hạnh phúc như vậy chứ?',
+    description: 'Nút Có/Không cho cảm xúc tích cực',
   },
   {
     id: '3',
-    title: 'Goal - Running 5k',
+    title: 'Mục tiêu - Chạy 5km',
     type: 'goal',
-    question: 'Did you achieve your goal of running 5k?',
-    description: 'Yes/No buttons for goal achievement',
+    question: 'Bạn đã đạt được mục tiêu chạy 5km chưa?',
+    description: 'Nút Có/Không cho mục tiêu đạt được',
   },
   {
     id: '4',
-    title: 'Goal - Learn Guitar',
+    title: 'Mục tiêu - Học Guitar',
     type: 'goal',
-    question: 'Did you learn to play 3 songs on guitar?',
-    description: 'Yes/No buttons for skill goal',
+    question: 'Bạn đã học được 3 bài hát guitar chưa?',
+    description: 'Nút Có/Không cho mục tiêu kỹ năng',
   },
   {
     id: '5',
-    title: 'Decision - Job Change',
+    title: 'Quyết định - Đổi việc',
     type: 'decision',
-    question: 'Was quitting your job the right decision?',
-    description: 'Rating 1-5 for major life decision',
+    question: 'Nghỉ việc có phải là quyết định đúng đắn?',
+    description: 'Đánh giá 1-5 sao cho quyết định quan trọng',
   },
   {
     id: '6',
-    title: 'Decision - Moving City',
+    title: 'Quyết định - Chuyển thành phố',
     type: 'decision',
-    question: 'How do you feel about moving to a new city now?',
-    description: 'Rating 1-5 for location decision',
+    question: 'Bây giờ bạn cảm thấy thế nào về việc chuyển đến thành phố mới?',
+    description: 'Đánh giá 1-5 sao cho quyết định địa điểm',
   },
 ];
 
@@ -108,7 +108,7 @@ export const ReflectionScreenDemo: React.FC = () => {
             color={UIColors.textPrimary}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Reflection Demo</Text>
+        <Text style={styles.headerTitle}>Demo Suy ngẫm</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -116,7 +116,7 @@ export const ReflectionScreenDemo: React.FC = () => {
       <View style={styles.infoBanner}>
         <MaterialCommunityIcons name="information" size={20} color={UIColors.primary} />
         <Text style={styles.infoText}>
-          Tap any scenario below to test the Reflection UI/UX
+          Chạm vào bất kỳ kịch bản nào bên dưới để kiểm tra UI/UX Suy ngẫm
         </Text>
       </View>
 
@@ -126,7 +126,7 @@ export const ReflectionScreenDemo: React.FC = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.sectionTitle}>Test Scenarios</Text>
+        <Text style={styles.sectionTitle}>Kịch bản kiểm tra</Text>
 
         {demoScenarios.map((scenario) => (
           <TouchableOpacity
@@ -158,7 +158,7 @@ export const ReflectionScreenDemo: React.FC = () => {
             <Text style={styles.cardQuestion}>"{scenario.question}"</Text>
             <Text style={styles.cardDescription}>{scenario.description}</Text>
             <View style={styles.cardFooter}>
-              <Text style={styles.testLabel}>Tap to test</Text>
+              <Text style={styles.testLabel}>Chạm để kiểm tra</Text>
               <MaterialCommunityIcons
                 name="chevron-right"
                 size={20}

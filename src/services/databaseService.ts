@@ -61,23 +61,23 @@ interface CapsuleImageRow {
 const validateCapsuleInput = (input: CreateCapsuleInput): void => {
   // Content validation
   if (!input.content || input.content.trim().length === 0) {
-    throw new Error('Content is required');
+    throw new Error('Nội dung không được để trống');
   }
   if (input.content.length > MAX_CONTENT_LENGTH) {
-    throw new Error(`Content must be less than ${MAX_CONTENT_LENGTH} characters`);
+    throw new Error(`Nội dung không được vượt quá ${MAX_CONTENT_LENGTH} ký tự`);
   }
 
   // Reflection question validation
   const requiresReflection = input.type !== 'memory';
   if (requiresReflection && !input.reflectionQuestion) {
-    throw new Error(`Reflection question is required for ${input.type} capsules`);
+    throw new Error(`Câu hỏi suy ngẫm là bắt buộc cho viên nang ${input.type}`);
   }
   if (
     input.reflectionQuestion &&
     input.reflectionQuestion.length > MAX_REFLECTION_QUESTION_LENGTH
   ) {
     throw new Error(
-      `Reflection question must be less than ${MAX_REFLECTION_QUESTION_LENGTH} characters`
+      `Câu hỏi suy ngẫm không được vượt quá ${MAX_REFLECTION_QUESTION_LENGTH} ký tự`
     );
   }
 
@@ -85,12 +85,12 @@ const validateCapsuleInput = (input: CreateCapsuleInput): void => {
   const now = new Date();
   const minUnlockDate = new Date(now.getTime() + MIN_UNLOCK_DELAY_MS);
   if (input.unlockDate <= minUnlockDate) {
-    throw new Error('Unlock date must be at least 1 minute in the future');
+    throw new Error('Thời gian mở phải cách ít nhất 1 phút');
   }
 
   // Images validation
   if (input.images && input.images.length > MAX_IMAGES) {
-    throw new Error(`Maximum ${MAX_IMAGES} images allowed`);
+    throw new Error(`Chỉ cho phép tối đa ${MAX_IMAGES} ảnh`);
   }
 };
 
@@ -191,7 +191,7 @@ export const createCapsule = async (input: CreateCapsuleInput): Promise<Capsule>
     // Fetch and return the created capsule
     const capsule = await getCapsuleById(capsuleId);
     if (!capsule) {
-      throw new Error('Failed to retrieve created capsule');
+      throw new Error('Không thể lấy viên nang vừa tạo');
     }
 
     return capsule;
@@ -364,16 +364,16 @@ export const updateReflectionAnswer = async (
       );
 
       if (!capsule) {
-        throw new Error('Capsule not found');
+        throw new Error('Không tìm thấy viên nang');
       }
 
       if (capsule.status !== 'ready' && capsule.status !== 'opened') {
-        throw new Error(`Cannot update reflection for ${capsule.status} capsule`);
+        throw new Error(`Không thể cập nhật phản hồi cho viên nang đang ${capsule.status}`);
       }
 
       // Validate answer format
       if (!validateReflectionAnswer(capsule.type, answer)) {
-        throw new Error(`Invalid answer "${answer}" for ${capsule.type} capsule`);
+        throw new Error(`Câu trả lời "${answer}" không hợp lệ cho viên nang ${capsule.type}`);
       }
 
       // Update reflection answer, status, and openedAt
@@ -392,7 +392,7 @@ export const updateReflectionAnswer = async (
       // Return updated capsule
       const updatedCapsule = await getCapsuleById(id);
       if (!updatedCapsule) {
-        throw new Error('Failed to retrieve updated capsule');
+        throw new Error('Không thể lấy viên nang đã cập nhật');
       }
 
       return updatedCapsule;
@@ -441,10 +441,10 @@ export const deleteCapsule = async (id: string): Promise<void> => {
     // 1. Verify capsule exists and is opened
     const capsule = await getCapsuleById(id);
     if (!capsule) {
-      throw new Error('Capsule not found');
+      throw new Error('Không tìm thấy viên nang');
     }
     if (capsule.status !== 'opened') {
-      throw new Error('Can only delete opened capsules');
+      throw new Error('Chỉ có thể xóa viên nang đã mở');
     }
 
     // 2. Get all image records before deleting (for file cleanup)
@@ -490,7 +490,7 @@ export const deleteCapsule = async (id: string): Promise<void> => {
 
     console.error('[DatabaseService] Failed to delete capsule:', error);
     throw new Error(
-      error instanceof Error ? error.message : 'Failed to delete capsule. Please try again.'
+      error instanceof Error ? error.message : 'Không thể xóa viên nang. Vui lòng thử lại.'
     );
   }
 };

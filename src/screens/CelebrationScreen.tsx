@@ -207,7 +207,7 @@ export const CelebrationScreen: React.FC = () => {
       return {
         type: 'memory' as const,
         icon: 'heart-multiple' as const,
-        message: 'Thank you for preserving this beautiful memory',
+        message: 'Cảm ơn bạn đã lưu giữ kỷ niệm tuyệt vời này',
         color: '#FF9800',
         bgColor: '#FFF3E0',
       };
@@ -218,7 +218,7 @@ export const CelebrationScreen: React.FC = () => {
       return {
         type: 'positive' as const,
         icon: 'check-circle' as const,
-        message: 'Amazing! Keep up the great work!',
+        message: 'Tuyệt vời! Hãy tiếp tục phát huy!',
         color: '#4CAF50',
         bgColor: '#E8F5E9',
       };
@@ -228,7 +228,7 @@ export const CelebrationScreen: React.FC = () => {
       return {
         type: 'encouraging' as const,
         icon: 'heart' as const,
-        message: "That's okay. Every experience teaches us something.",
+        message: 'Không sao. Mỗi trải nghiệm đều dạy chúng ta điều gì đó.',
         color: '#FF5722',
         bgColor: '#FFEBEE',
       };
@@ -240,7 +240,7 @@ export const CelebrationScreen: React.FC = () => {
       return {
         type: 'positive' as const,
         icon: 'check-circle' as const,
-        message: 'Excellent decision! You made the right choice.',
+        message: 'Quyết định tuyệt vời! Bạn đã chọn đúng.',
         color: '#4CAF50',
         bgColor: '#E8F5E9',
       };
@@ -250,7 +250,7 @@ export const CelebrationScreen: React.FC = () => {
       return {
         type: 'neutral' as const,
         icon: 'information' as const,
-        message: "It's all part of the journey.",
+        message: 'Tất cả đều là một phần của hành trình.',
         color: '#2196F3',
         bgColor: '#E3F2FD',
       };
@@ -260,7 +260,7 @@ export const CelebrationScreen: React.FC = () => {
       return {
         type: 'encouraging' as const,
         icon: 'heart' as const,
-        message: 'Every decision is a learning opportunity.',
+        message: 'Mỗi quyết định đều là cơ hội để học hỏi.',
         color: '#FF5722',
         bgColor: '#FFEBEE',
       };
@@ -270,7 +270,7 @@ export const CelebrationScreen: React.FC = () => {
     return {
       type: 'neutral' as const,
       icon: 'information' as const,
-      message: 'Thank you for reflecting!',
+      message: 'Cảm ơn bạn đã suy ngẫm!',
       color: typeColor.primary,
       bgColor: typeColor.light,
     };
@@ -397,7 +397,7 @@ export const CelebrationScreen: React.FC = () => {
 
           {/* Title */}
           <Animated.Text style={[styles.title, messageAnimatedStyle]}>
-            Reflection Saved!
+            Đã lưu suy ngẫm!
           </Animated.Text>
 
           {/* Message */}
@@ -419,7 +419,7 @@ export const CelebrationScreen: React.FC = () => {
                 cardAnimatedStyle,
               ]}
             >
-              <Text style={styles.summaryLabel}>Your answer:</Text>
+              <Text style={styles.summaryLabel}>Câu trả lời của bạn:</Text>
               <Text
                 style={[
                   styles.summaryValue,
@@ -437,12 +437,12 @@ export const CelebrationScreen: React.FC = () => {
 
           {/* Countdown */}
           <Animated.Text style={[styles.countdown, messageAnimatedStyle]}>
-            Auto-advancing in {Math.ceil(countdown.value)}s
+            Tự động chuyển sau {Math.ceil(countdown.value)}s
           </Animated.Text>
 
           {/* Tap to skip hint */}
           <Animated.Text style={[styles.skipHint, messageAnimatedStyle]}>
-            Tap anywhere to skip
+            Chạm vào bất kỳ đâu để bỏ qua
           </Animated.Text>
         </View>
 
@@ -459,7 +459,7 @@ export const CelebrationScreen: React.FC = () => {
             ]}
           >
             <MaterialCommunityIcons name="archive" size={20} color="#FFFFFF" />
-            <Text style={styles.primaryButtonText}>View Archive</Text>
+            <Text style={styles.primaryButtonText}>Xem Lưu trữ</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -481,7 +481,7 @@ export const CelebrationScreen: React.FC = () => {
                 },
               ]}
             >
-              Go Home
+              Về Trang chủ
             </Text>
           </TouchableOpacity>
         </Animated.View>

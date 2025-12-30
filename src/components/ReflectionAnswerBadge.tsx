@@ -35,7 +35,7 @@ export const ReflectionAnswerBadge: React.FC<ReflectionAnswerBadgeProps> = ({
       return (
         <View style={[styles.badge, styles.badgeYes]}>
           <MaterialIcons name="check-circle" size={16} color={UIColors.success} />
-          <Text style={[styles.badgeText, { color: UIColors.success }]}>Yes</Text>
+          <Text style={[styles.badgeText, { color: UIColors.success }]}>Có</Text>
         </View>
       );
     }
@@ -44,7 +44,7 @@ export const ReflectionAnswerBadge: React.FC<ReflectionAnswerBadgeProps> = ({
       return (
         <View style={[styles.badge, styles.badgeNo]}>
           <MaterialIcons name="cancel" size={16} color={UIColors.danger} />
-          <Text style={[styles.badgeText, { color: UIColors.danger }]}>No</Text>
+          <Text style={[styles.badgeText, { color: UIColors.danger }]}>Không</Text>
         </View>
       );
     }
@@ -85,7 +85,7 @@ export const ReflectionAnswerBadge: React.FC<ReflectionAnswerBadgeProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Reflection:</Text>
+      <Text style={styles.label}>Suy ngẫm:</Text>
       {renderAnswer()}
     </View>
   );

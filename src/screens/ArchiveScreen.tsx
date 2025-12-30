@@ -120,15 +120,15 @@ export const ArchiveScreen: React.FC = () => {
 
       // Show error alert
       Alert.alert(
-        'Error',
-        'Failed to load archive. Please try again.',
+        'Lỗi',
+        'Không thể tải lưu trữ. Vui lòng thử lại.',
         [
           {
-            text: 'Retry',
+            text: 'Thử lại',
             onPress: () => loadCapsules(),
           },
           {
-            text: 'Cancel',
+            text: 'Hủy',
             style: 'cancel',
           },
         ]
@@ -184,15 +184,15 @@ export const ArchiveScreen: React.FC = () => {
    */
   const handleDeletePress = useCallback((capsuleId: string) => {
     Alert.alert(
-      'Delete Capsule',
-      'Are you sure you want to delete this capsule? This cannot be undone.',
+      'Xóa viên nang',
+      'Bạn có chắc chắn muốn xóa viên nang này? Hành động này không thể hoàn tác.',
       [
         {
-          text: 'Cancel',
+          text: 'Hủy',
           style: 'cancel',
         },
         {
-          text: 'Delete',
+          text: 'Xóa',
           style: 'destructive',
           onPress: () => handleDeleteConfirm(capsuleId),
         },
@@ -228,8 +228,8 @@ export const ArchiveScreen: React.FC = () => {
 
         // Show error alert
         Alert.alert(
-          'Delete Failed',
-          error instanceof Error ? error.message : 'Failed to delete capsule. Please try again.',
+          'Xóa thất bại',
+          error instanceof Error ? error.message : 'Không thể xóa viên nang. Vui lòng thử lại.',
           [{ text: 'OK' }]
         );
       } finally {
@@ -269,7 +269,7 @@ export const ArchiveScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <MaterialIcons name="delete" size={24} color="white" />
-            <Text style={styles.deleteText}>Delete</Text>
+            <Text style={styles.deleteText}>Xóa</Text>
           </TouchableOpacity>
         </Animated.View>
       );
@@ -320,7 +320,7 @@ export const ArchiveScreen: React.FC = () => {
           >
             <MaterialIcons name="arrow-back" size={24} color={UIColors.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Archive</Text>
+          <Text style={styles.headerTitle}>Lưu trữ</Text>
           <View style={styles.headerRight} />
         </View>
 
@@ -328,7 +328,7 @@ export const ArchiveScreen: React.FC = () => {
         {loading && capsules.length === 0 ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={UIColors.primary} />
-            <Text style={styles.loadingText}>Loading archive...</Text>
+            <Text style={styles.loadingText}>Đang tải lưu trữ...</Text>
           </View>
         ) : (
           /* Capsule List */

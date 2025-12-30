@@ -178,7 +178,7 @@ export const OnboardingIllustration: React.FC<OnboardingIllustrationProps> = ({ 
         <View style={styles.container}>
           <Animated.View style={[styles.iconContainer, reflectStyle]}>
             <View style={[styles.capsuleBox, { backgroundColor: Colors.ui.success }]}>
-              <Ionicons name="gift-open" size={70} color="#FFFFFF" />
+              <Ionicons name="gift" size={70} color="#FFFFFF" />
             </View>
             {/* Celebration sparkles */}
             <View style={styles.sparklesContainer}>

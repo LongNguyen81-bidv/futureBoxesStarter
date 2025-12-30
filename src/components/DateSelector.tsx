@@ -71,7 +71,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
     if (date) {
       // Validate future date
       if (isBefore(date, new Date())) {
-        Alert.alert('Invalid date', 'Please select a date in the future.');
+        Alert.alert('Ngày không hợp lệ', 'Vui lòng chọn ngày trong tương lai.');
         return;
       }
 
@@ -86,13 +86,13 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
   };
 
   const formatSelectedDate = () => {
-    if (!selectedDate) return 'Not selected';
-    return format(selectedDate, "MMM dd, yyyy 'at' h:mm a");
+    if (!selectedDate) return 'Chưa chọn';
+    return format(selectedDate, "dd/MM/yyyy 'lúc' HH:mm");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>When to open?</Text>
+      <Text style={styles.label}>Khi nào mở khóa?</Text>
 
       {/* Preset Buttons */}
       <View style={styles.presetsRow}>
@@ -110,7 +110,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
               selectedPreset === '1week' && styles.presetButtonTextSelected,
             ]}
           >
-            1 week
+            1 tuần
           </Text>
         </TouchableOpacity>
 
@@ -128,7 +128,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
               selectedPreset === '1month' && styles.presetButtonTextSelected,
             ]}
           >
-            1 month
+            1 tháng
           </Text>
         </TouchableOpacity>
 
@@ -146,7 +146,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
               selectedPreset === '1year' && styles.presetButtonTextSelected,
             ]}
           >
-            1 year
+            1 năm
           </Text>
         </TouchableOpacity>
       </View>
@@ -171,7 +171,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
             selectedPreset === 'custom' && styles.customButtonTextSelected,
           ]}
         >
-          Custom date & time
+          Tùy chỉnh ngày & giờ
         </Text>
       </TouchableOpacity>
 
@@ -183,7 +183,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
             size={16}
             color={UIColors.primary}
           />
-          <Text style={styles.selectedDateText}>Opens on: {formatSelectedDate()}</Text>
+          <Text style={styles.selectedDateText}>Mở vào: {formatSelectedDate()}</Text>
         </View>
       )}
 
@@ -204,7 +204,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
           style={styles.doneButton}
           onPress={() => setShowPicker(false)}
         >
-          <Text style={styles.doneButtonText}>Done</Text>
+          <Text style={styles.doneButtonText}>Xong</Text>
         </TouchableOpacity>
       )}
     </View>

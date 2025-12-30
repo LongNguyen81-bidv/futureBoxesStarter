@@ -122,7 +122,7 @@ export const YesNoButtons: React.FC<YesNoButtonsProps> = ({
               { color: isYesSelected ? UIColors.textWhite : UIColors.success },
             ]}
           >
-            YES
+            CÓ
           </Text>
 
           {/* Checkmark indicator */}
@@ -177,7 +177,7 @@ export const YesNoButtons: React.FC<YesNoButtonsProps> = ({
               { color: isNoSelected ? UIColors.textWhite : UIColors.danger },
             ]}
           >
-            NO
+            KHÔNG
           </Text>
 
           {/* Checkmark indicator */}

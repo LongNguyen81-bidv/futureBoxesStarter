@@ -48,11 +48,11 @@ export const calculateTimeLocked = (createdAt: Date, unlockAt: Date): string => 
   const days = differenceInDays(unlockAt, subMonths(unlockAt, months + years * 12));
 
   const parts: string[] = [];
-  if (years > 0) parts.push(`${years} year${years > 1 ? 's' : ''}`);
-  if (months > 0) parts.push(`${months} month${months > 1 ? 's' : ''}`);
-  if (days > 0 && years === 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+  if (years > 0) parts.push(`${years} năm`);
+  if (months > 0) parts.push(`${months} tháng`);
+  if (days > 0 && years === 0) parts.push(`${days} ngày`);
 
-  return parts.join(', ') || '1 day';
+  return parts.join(', ') || '1 ngày';
 };
 
 /**

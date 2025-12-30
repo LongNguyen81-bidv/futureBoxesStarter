@@ -115,7 +115,7 @@ export const CapsuleCard: React.FC<CapsuleCardProps> = ({
 
     return (
       <View style={styles.readyBadge}>
-        <Text style={styles.readyBadgeText}>Ready!</Text>
+        <Text style={styles.readyBadgeText}>Sẵn sàng!</Text>
       </View>
     );
   };
@@ -137,6 +137,7 @@ export const CapsuleCard: React.FC<CapsuleCardProps> = ({
         onPressOut={handlePressOut}
         onPress={handlePress}
         style={styles.touchable}
+        testID="capsule-card"
       >
         <LinearGradient
           colors={isReady ? typeColor.gradient : [typeColor.light, typeColor.light]}
@@ -172,7 +173,7 @@ export const CapsuleCard: React.FC<CapsuleCardProps> = ({
               ]}
               numberOfLines={2}
             >
-              {countdown || 'Loading...'}
+              {countdown || 'Đang tải...'}
             </Text>
           </View>
         </LinearGradient>

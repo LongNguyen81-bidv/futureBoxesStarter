@@ -44,26 +44,26 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
       const capsuleData = await getCapsuleWithImages(capsuleId);
 
       if (!capsuleData) {
-        throw new Error('Capsule not found');
+        throw new Error('Không tìm thấy viên nang');
       }
 
       // Verify status
       if (capsuleData.status !== 'ready') {
         if (capsuleData.status === 'locked') {
-          throw new Error('Capsule is still locked. Please wait until unlock time.');
+          throw new Error('Viên nang vẫn đang bị khóa. Vui lòng đợi đến thời gian mở khóa.');
         }
         if (capsuleData.status === 'opened') {
           // Redirect to Archive for opened capsules
           Alert.alert(
-            'Already Opened',
-            'This capsule has already been opened. You can view it in the Archive.',
+            'Đã mở',
+            'Viên nang này đã được mở. Bạn có thể xem nó trong Lưu trữ.',
             [
               {
-                text: 'Go to Archive',
+                text: 'Đến Lưu trữ',
                 onPress: () => navigation.replace('Archive'),
               },
               {
-                text: 'Cancel',
+                text: 'Hủy',
                 onPress: () => navigation.goBack(),
                 style: 'cancel',
               },
@@ -83,8 +83,8 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
 
       // Show error alert and navigate back
       Alert.alert(
-        'Error',
-        err.message || 'Failed to load capsule. Please try again.',
+        'Lỗi',
+        err.message || 'Không thể tải viên nang. Vui lòng thử lại.',
         [
           {
             text: 'OK',
@@ -126,7 +126,7 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
       }
     } catch (err: any) {
       console.error('[OpenCapsuleContainer] Failed to continue:', err);
-      Alert.alert('Error', 'Failed to proceed. Please try again.');
+      Alert.alert('Lỗi', 'Không thể tiếp tục. Vui lòng thử lại.');
     }
   };
 
@@ -134,15 +134,15 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
     if (!capsule) return;
 
     Alert.alert(
-      'Delete Capsule',
-      'Are you sure you want to delete this capsule? This cannot be undone.',
+      'Xóa viên nang',
+      'Bạn có chắc chắn muốn xóa viên nang này? Hành động này không thể hoàn tác.',
       [
         {
-          text: 'Cancel',
+          text: 'Hủy',
           style: 'cancel',
         },
         {
-          text: 'Delete',
+          text: 'Xóa',
           style: 'destructive',
           onPress: () => handleDeleteConfirm(),
         },
@@ -174,8 +174,8 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
 
       // Show error alert and keep on current screen
       Alert.alert(
-        'Delete Failed',
-        error instanceof Error ? error.message : 'Failed to delete capsule. Please try again.',
+        'Xóa thất bại',
+        error instanceof Error ? error.message : 'Không thể xóa viên nang. Vui lòng thử lại.',
         [{ text: 'OK' }]
       );
 
@@ -189,7 +189,7 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={UIColors.primary} />
-        <Text style={styles.loadingText}>Opening capsule...</Text>
+        <Text style={styles.loadingText}>Đang mở viên nang...</Text>
       </View>
     );
   }
@@ -198,7 +198,7 @@ export const OpenCapsuleScreenContainer: React.FC = () => {
   if (error || !capsule) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error || 'Failed to load capsule'}</Text>
+        <Text style={styles.errorText}>{error || 'Không thể tải viên nang'}</Text>
       </View>
     );
   }

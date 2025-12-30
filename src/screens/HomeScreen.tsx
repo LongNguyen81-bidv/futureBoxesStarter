@@ -75,7 +75,7 @@ export const HomeScreen: React.FC = () => {
       setCountdowns(initialCountdowns);
     } catch (err) {
       console.error('Error loading capsules:', err);
-      setError('Failed to load capsules. Pull to refresh to try again.');
+      setError('Không thể tải viên nang. Kéo xuống để thử lại.');
     } finally {
       setLoading(false);
     }
@@ -191,8 +191,8 @@ export const HomeScreen: React.FC = () => {
       // Show locked message
       const unlockDate = new Date(capsule.unlockDate).toLocaleDateString();
       Alert.alert(
-        'Capsule Locked',
-        `This capsule is still locked. Come back on ${unlockDate}.`,
+        'Viên nang đã khóa',
+        `Viên nang này vẫn đang bị khóa. Quay lại vào ${unlockDate}.`,
         [{ text: 'OK' }]
       );
     } else if (capsule.status === 'ready') {
@@ -265,7 +265,7 @@ export const HomeScreen: React.FC = () => {
           <MaterialIcons name="error-outline" size={64} color={UIColors.textSecondary} />
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={loadCapsules}>
-            <Text style={styles.retryButtonText}>Retry</Text>
+            <Text style={styles.retryButtonText}>Thử lại</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -279,7 +279,7 @@ export const HomeScreen: React.FC = () => {
         <StatusBar barStyle="dark-content" />
         {renderHeader()}
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
+          <Text style={styles.loadingText}>Đang tải...</Text>
         </View>
       </SafeAreaView>
     );

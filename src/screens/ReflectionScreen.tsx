@@ -162,15 +162,15 @@ export const ReflectionScreen: React.FC = () => {
 
       // Show error alert with retry option
       Alert.alert(
-        'Error',
-        err.message || 'Failed to save your answer. Please try again.',
+        'Lỗi',
+        err.message || 'Không thể lưu câu trả lời của bạn. Vui lòng thử lại.',
         [
           {
-            text: 'Retry',
+            text: 'Thử lại',
             onPress: () => handleContinue(),
           },
           {
-            text: 'Cancel',
+            text: 'Hủy',
             style: 'cancel',
           },
         ]
@@ -184,12 +184,12 @@ export const ReflectionScreen: React.FC = () => {
   const handleBack = () => {
     if (selectedAnswer) {
       Alert.alert(
-        'Discard answer?',
-        'You have selected an answer. Are you sure you want to go back?',
+        'Bỏ câu trả lời?',
+        'Bạn đã chọn một câu trả lời. Bạn có chắc chắn muốn quay lại?',
         [
-          { text: 'Stay', style: 'cancel' },
+          { text: 'Ở lại', style: 'cancel' },
           {
-            text: 'Discard',
+            text: 'Bỏ',
             style: 'destructive',
             onPress: () => navigation.goBack(),
           },
@@ -221,7 +221,7 @@ export const ReflectionScreen: React.FC = () => {
             color={UIColors.textPrimary}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Reflect</Text>
+        <Text style={styles.headerTitle}>Suy ngẫm</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -249,7 +249,7 @@ export const ReflectionScreen: React.FC = () => {
 
         {/* Question Section */}
         <View style={styles.questionSection}>
-          <Text style={styles.questionLabel}>Your question:</Text>
+          <Text style={styles.questionLabel}>Câu hỏi của bạn:</Text>
           <View style={styles.questionCard}>
             <Text style={styles.questionText}>"{reflectionQuestion}"</Text>
           </View>
@@ -257,7 +257,7 @@ export const ReflectionScreen: React.FC = () => {
 
         {/* Instruction */}
         <Text style={styles.instruction}>
-          {isYesNoType ? 'How do you answer?' : 'Rate your decision:'}
+          {isYesNoType ? 'Bạn trả lời thế nào?' : 'Đánh giá quyết định của bạn:'}
         </Text>
 
         {/* Answer UI */}
@@ -302,11 +302,11 @@ export const ReflectionScreen: React.FC = () => {
             {loading ? (
               <>
                 <ActivityIndicator size="small" color="#FFFFFF" />
-                <Text style={styles.continueButtonText}>Saving...</Text>
+                <Text style={styles.continueButtonText}>Đang lưu...</Text>
               </>
             ) : (
               <>
-                <Text style={styles.continueButtonText}>Continue</Text>
+                <Text style={styles.continueButtonText}>Tiếp tục</Text>
                 <MaterialCommunityIcons name="arrow-right" size={20} color="#FFFFFF" />
               </>
             )}

@@ -1,0 +1,23 @@
+/**
+ * Mock for expo-haptics
+ */
+
+export const ImpactFeedbackStyle = {
+  Light: 'light',
+  Medium: 'medium',
+  Heavy: 'heavy',
+  Soft: 'soft',
+  Rigid: 'rigid',
+};
+
+export const NotificationFeedbackType = {
+  Success: 'success',
+  Warning: 'warning',
+  Error: 'error',
+};
+
+export const impactAsync = jest.fn(() => Promise.resolve());
+
+export const notificationAsync = jest.fn(() => Promise.resolve());
+
+export const selectionAsync = jest.fn(() => Promise.resolve());

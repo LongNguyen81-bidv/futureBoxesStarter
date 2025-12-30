@@ -46,6 +46,8 @@ export const UIColors = {
   warningLight: '#FEF3C7',
   danger: '#EF4444', // Red
   dangerLight: '#FEE2E2',
+  error: '#EF4444', // Alias for danger
+  errorLight: '#FEE2E2',
 
   // Text colors
   textPrimary: '#1F2937', // Dark gray

@@ -49,31 +49,31 @@ const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 // Type-specific configurations
 const TYPE_CONFIG = {
   emotion: {
-    title: 'Emotion',
+    title: 'Cảm xúc',
     icon: 'heart' as keyof typeof MaterialCommunityIcons.glyphMap,
-    contentPlaceholder: 'What are you feeling right now? Express your emotions...',
-    reflectionPlaceholder: 'e.g., Did this feeling pass?',
+    contentPlaceholder: 'Bạn đang cảm thấy thế nào? Hãy bày tỏ cảm xúc của mình...',
+    reflectionPlaceholder: 'VD: Cảm giác này đã qua chưa?',
     hasReflection: true,
   },
   goal: {
-    title: 'Goal',
+    title: 'Mục tiêu',
     icon: 'flag-checkered' as keyof typeof MaterialCommunityIcons.glyphMap,
-    contentPlaceholder: 'What goal do you want to achieve? Describe it in detail...',
-    reflectionPlaceholder: 'e.g., Did you achieve this goal?',
+    contentPlaceholder: 'Mục tiêu bạn muốn đạt được là gì? Mô tả chi tiết...',
+    reflectionPlaceholder: 'VD: Bạn đã đạt được mục tiêu này chưa?',
     hasReflection: true,
   },
   memory: {
-    title: 'Memory',
+    title: 'Kỷ niệm',
     icon: 'camera' as keyof typeof MaterialCommunityIcons.glyphMap,
-    contentPlaceholder: 'Describe this special moment you want to remember...',
+    contentPlaceholder: 'Mô tả khoảnh khắc đặc biệt bạn muốn lưu giữ...',
     reflectionPlaceholder: '',
     hasReflection: false,
   },
   decision: {
-    title: 'Decision',
+    title: 'Quyết định',
     icon: 'scale-balance' as keyof typeof MaterialCommunityIcons.glyphMap,
-    contentPlaceholder: 'What important decision did you make? Why?',
-    reflectionPlaceholder: 'e.g., How do you feel about this decision now?',
+    contentPlaceholder: 'Quyết định quan trọng bạn đã đưa ra là gì? Tại sao?',
+    reflectionPlaceholder: 'VD: Bạn cảm thấy thế nào về quyết định này?',
     hasReflection: true,
   },
 } as const;
@@ -122,10 +122,10 @@ export const CreateCapsuleScreen: React.FC = () => {
       unlockDate !== null;
 
     if (hasData) {
-      Alert.alert('Discard changes?', 'Your capsule draft will be lost.', [
-        { text: 'Cancel', style: 'cancel' },
+      Alert.alert('Hủy thay đổi?', 'Bản nháp viên nang của bạn sẽ bị mất.', [
+        { text: 'Hủy', style: 'cancel' },
         {
-          text: 'Discard',
+          text: 'Xóa',
           style: 'destructive',
           onPress: () => navigation.goBack(),
         },
@@ -139,13 +139,13 @@ export const CreateCapsuleScreen: React.FC = () => {
     if (!isFormValid()) {
       // Show specific error message
       if (content.trim().length === 0) {
-        Alert.alert('Content required', 'Please enter your message.');
+        Alert.alert('Cần có nội dung', 'Vui lòng nhập tin nhắn của bạn.');
       } else if (content.length > MAX_CONTENT_LENGTH) {
-        Alert.alert('Content too long', `Maximum ${MAX_CONTENT_LENGTH} characters allowed.`);
+        Alert.alert('Nội dung quá dài', `Tối đa ${MAX_CONTENT_LENGTH} ký tự.`);
       } else if (typeConfig.hasReflection && reflectionQuestion.trim().length === 0) {
-        Alert.alert('Reflection required', 'Please enter a question for your future self.');
+        Alert.alert('Cần có câu hỏi', 'Vui lòng nhập câu hỏi cho bản thân tương lai.');
       } else if (!unlockDate) {
-        Alert.alert('Date required', 'Please select when to open this capsule.');
+        Alert.alert('Cần chọn ngày', 'Vui lòng chọn thời điểm mở viên nang.');
       }
       return;
     }
@@ -196,7 +196,7 @@ export const CreateCapsuleScreen: React.FC = () => {
             color={UIColors.textPrimary}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Create {typeConfig.title}</Text>
+        <Text style={styles.headerTitle}>Tạo {typeConfig.title}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -219,13 +219,13 @@ export const CreateCapsuleScreen: React.FC = () => {
               color={typeColor.primary}
             />
             <Text style={[styles.typeBadgeText, { color: typeColor.primary }]}>
-              {typeConfig.title} Capsule
+              Viên nang {typeConfig.title}
             </Text>
           </View>
 
           {/* Content Input */}
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>What's on your mind?</Text>
+            <Text style={styles.sectionLabel}>Bạn đang nghĩ gì?</Text>
             <View style={styles.textInputContainer}>
               <TextInput
                 ref={contentInputRef}
@@ -254,7 +254,7 @@ export const CreateCapsuleScreen: React.FC = () => {
           {/* Reflection Question (conditional) */}
           {typeConfig.hasReflection && (
             <View style={styles.section}>
-              <Text style={styles.sectionLabel}>Question for future you</Text>
+              <Text style={styles.sectionLabel}>Câu hỏi cho bạn trong tương lai</Text>
               <TextInput
                 ref={reflectionInputRef}
                 style={styles.reflectionInput}
@@ -285,7 +285,7 @@ export const CreateCapsuleScreen: React.FC = () => {
             disabled={!isFormValid()}
             activeOpacity={0.9}
           >
-            <Text style={styles.previewButtonText}>Preview Capsule</Text>
+            <Text style={styles.previewButtonText}>Xem trước viên nang</Text>
             <MaterialCommunityIcons
               name="arrow-right"
               size={20}

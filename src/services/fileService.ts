@@ -22,6 +22,12 @@ const ALLOWED_FORMATS = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG'];
  */
 export const initializeImagesDirectory = async (): Promise<void> => {
   try {
+    // Check if documentDirectory is available
+    if (!FileSystem.documentDirectory) {
+      console.warn('[FileService] documentDirectory not available yet');
+      return; // Skip initialization, will be created on-demand
+    }
+
     const dirPath = getImagesDirectory();
     const dirInfo = await FileSystem.getInfoAsync(dirPath);
 
@@ -31,7 +37,8 @@ export const initializeImagesDirectory = async (): Promise<void> => {
     }
   } catch (error) {
     console.error('[FileService] Failed to initialize directory:', error);
-    throw new Error('Failed to initialize images directory');
+    // Don't throw - allow app to continue, directory will be created on-demand
+    console.warn('[FileService] Directory will be created on-demand when needed');
   }
 };
 
@@ -60,7 +67,7 @@ export const validateImage = async (imageUri: string): Promise<{
     // Check if file exists
     const fileInfo = await FileSystem.getInfoAsync(imageUri);
     if (!fileInfo.exists) {
-      return { valid: false, error: 'File does not exist' };
+      return { valid: false, error: 'File không tồn tại' };
     }
 
     // Check file format
@@ -70,7 +77,7 @@ export const validateImage = async (imageUri: string): Promise<{
     if (!hasValidFormat) {
       return {
         valid: false,
-        error: 'Invalid format. Supported: JPG, PNG',
+        error: 'Định dạng không hợp lệ. Hỗ trợ: JPG, PNG',
       };
     }
 
@@ -78,14 +85,14 @@ export const validateImage = async (imageUri: string): Promise<{
     if (fileInfo.size && fileInfo.size > MAX_IMAGE_SIZE) {
       return {
         valid: false,
-        error: `File too large. Max size: ${MAX_IMAGE_SIZE / 1024 / 1024}MB`,
+        error: `File quá lớn. Kích thước tối đa: ${MAX_IMAGE_SIZE / 1024 / 1024}MB`,
       };
     }
 
     return { valid: true };
   } catch (error) {
     console.error('[FileService] Validation error:', error);
-    return { valid: false, error: 'Failed to validate image' };
+    return { valid: false, error: 'Không thể xác thực ảnh' };
   }
 };
 
@@ -129,7 +136,7 @@ export const copyImageToAppDirectory = async (
     return destinationPath;
   } catch (error) {
     console.error('[FileService] Failed to copy image:', error);
-    throw new Error(`Failed to copy image: ${error}`);
+    throw new Error(`Không thể sao chép ảnh: ${error}`);
   }
 };
 

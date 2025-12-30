@@ -23,21 +23,21 @@ export const OpenCapsuleScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Open Capsule</Text>
-      <Text style={styles.subtitle}>Coming Soon</Text>
+      <Text style={styles.title}>Mở viên nang</Text>
+      <Text style={styles.subtitle}>Sắp ra mắt</Text>
       <Text style={styles.description}>
-        This screen will display the capsule content with:
+        Màn hình này sẽ hiển thị nội dung viên nang với:
       </Text>
-      <Text style={styles.list}>• Opening animation</Text>
-      <Text style={styles.list}>• Text content</Text>
-      <Text style={styles.list}>• Images (if any)</Text>
-      <Text style={styles.list}>• Reflection question</Text>
-      <Text style={styles.list}>• Celebration effects</Text>
+      <Text style={styles.list}>• Hiệu ứng mở</Text>
+      <Text style={styles.list}>• Nội dung văn bản</Text>
+      <Text style={styles.list}>• Hình ảnh (nếu có)</Text>
+      <Text style={styles.list}>• Câu hỏi suy ngẫm</Text>
+      <Text style={styles.list}>• Hiệu ứng chúc mừng</Text>
 
-      <Text style={styles.capsuleId}>Capsule ID: {capsuleId}</Text>
+      <Text style={styles.capsuleId}>ID viên nang: {capsuleId}</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-        <Text style={styles.buttonText}>Go Back</Text>
+        <Text style={styles.buttonText}>Quay lại</Text>
       </TouchableOpacity>
     </View>
   );

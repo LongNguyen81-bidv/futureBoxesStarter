@@ -132,12 +132,12 @@ export const EmptyArchiveState: React.FC<EmptyArchiveStateProps> = ({
 
       {/* Title with entry animation */}
       <Reanimated.Text style={[styles.title, titleAnimatedStyle]}>
-        No opened capsules yet
+        Chưa có viên nang nào được mở
       </Reanimated.Text>
 
       {/* Subtitle with entry animation */}
       <Reanimated.Text style={[styles.subtitle, subtitleAnimatedStyle]}>
-        When you open a time capsule, it will appear here for you to revisit.
+        Khi bạn mở một viên nang thời gian, nó sẽ xuất hiện ở đây để bạn xem lại.
       </Reanimated.Text>
 
       {/* Optional CTA Button with entry animation */}
@@ -153,7 +153,7 @@ export const EmptyArchiveState: React.FC<EmptyArchiveStateProps> = ({
               size={20}
               color={UIColors.textSecondary}
             />
-            <Text style={styles.ctaButtonText}>Go to Home</Text>
+            <Text style={styles.ctaButtonText}>Về Trang chủ</Text>
           </TouchableOpacity>
         </Reanimated.View>
       )}
