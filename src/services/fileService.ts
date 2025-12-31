@@ -22,13 +22,8 @@ const ALLOWED_FORMATS = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG'];
  */
 export const initializeImagesDirectory = async (): Promise<void> => {
   try {
-    // Check if documentDirectory is available
-    if (!FileSystem.documentDirectory) {
-      console.warn('[FileService] documentDirectory not available yet');
-      return; // Skip initialization, will be created on-demand
-    }
-
-    const dirPath = getImagesDirectory();
+    // Wait for documentDirectory to be available
+    const dirPath = await getImagesDirectory();
     const dirInfo = await FileSystem.getInfoAsync(dirPath);
 
     if (!dirInfo.exists) {
@@ -44,19 +39,30 @@ export const initializeImagesDirectory = async (): Promise<void> => {
 
 /**
  * Get images directory path
+ * Waits for documentDirectory to be available
  */
-const getImagesDirectory = (): string => {
-  if (!FileSystem.documentDirectory) {
-    throw new Error('FileSystem.documentDirectory chưa sẵn sàng');
+const getImagesDirectory = async (): Promise<string> => {
+  // Wait for documentDirectory to be available (max 5 seconds)
+  const maxAttempts = 50;
+  const delayMs = 100;
+
+  for (let i = 0; i < maxAttempts; i++) {
+    if (FileSystem.documentDirectory) {
+      return `${FileSystem.documentDirectory}${IMAGES_DIR}`;
+    }
+    console.log(`[FileService] Waiting for documentDirectory... attempt ${i + 1}/${maxAttempts}`);
+    await new Promise(resolve => setTimeout(resolve, delayMs));
   }
-  return `${FileSystem.documentDirectory}${IMAGES_DIR}`;
+
+  throw new Error('FileSystem.documentDirectory không khả dụng sau 5 giây. Vui lòng thử lại.');
 };
 
 /**
  * Get capsule-specific directory path
  */
-const getCapsuleDirectory = (capsuleId: string): string => {
-  return `${getImagesDirectory()}/${capsuleId}`;
+const getCapsuleDirectory = async (capsuleId: string): Promise<string> => {
+  const baseDir = await getImagesDirectory();
+  return `${baseDir}/${capsuleId}`;
 };
 
 /**
@@ -120,7 +126,7 @@ export const copyImageToAppDirectory = async (
     }
 
     // Create capsule directory if needed
-    const capsuleDir = getCapsuleDirectory(capsuleId);
+    const capsuleDir = await getCapsuleDirectory(capsuleId);
     console.log('[FileService] Target directory:', capsuleDir);
 
     const dirInfo = await FileSystem.getInfoAsync(capsuleDir);
@@ -194,7 +200,7 @@ export const copyImagesToAppDirectory = async (
  */
 export const deleteCapsuleImages = async (capsuleId: string): Promise<void> => {
   try {
-    const capsuleDir = getCapsuleDirectory(capsuleId);
+    const capsuleDir = await getCapsuleDirectory(capsuleId);
     const dirInfo = await FileSystem.getInfoAsync(capsuleDir);
 
     if (dirInfo.exists) {
