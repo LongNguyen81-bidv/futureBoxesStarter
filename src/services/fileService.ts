@@ -39,22 +39,23 @@ export const initializeImagesDirectory = async (): Promise<void> => {
 
 /**
  * Get images directory path
- * Waits for documentDirectory to be available
+ * Uses documentDirectory if available, otherwise falls back to cacheDirectory
  */
 const getImagesDirectory = async (): Promise<string> => {
-  // Wait for documentDirectory to be available (max 5 seconds)
-  const maxAttempts = 50;
-  const delayMs = 100;
-
-  for (let i = 0; i < maxAttempts; i++) {
-    if (FileSystem.documentDirectory) {
-      return `${FileSystem.documentDirectory}${IMAGES_DIR}`;
-    }
-    console.log(`[FileService] Waiting for documentDirectory... attempt ${i + 1}/${maxAttempts}`);
-    await new Promise(resolve => setTimeout(resolve, delayMs));
+  // Try documentDirectory first
+  if (FileSystem.documentDirectory) {
+    console.log('[FileService] Using documentDirectory');
+    return `${FileSystem.documentDirectory}${IMAGES_DIR}`;
   }
 
-  throw new Error('FileSystem.documentDirectory không khả dụng sau 5 giây. Vui lòng thử lại.');
+  // Fallback to cacheDirectory
+  if (FileSystem.cacheDirectory) {
+    console.log('[FileService] Using cacheDirectory as fallback');
+    return `${FileSystem.cacheDirectory}${IMAGES_DIR}`;
+  }
+
+  // If neither available, throw error
+  throw new Error('Không có thư mục lưu trữ khả dụng. Vui lòng khởi động lại app.');
 };
 
 /**
