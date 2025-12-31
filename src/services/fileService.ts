@@ -46,6 +46,9 @@ export const initializeImagesDirectory = async (): Promise<void> => {
  * Get images directory path
  */
 const getImagesDirectory = (): string => {
+  if (!FileSystem.documentDirectory) {
+    throw new Error('FileSystem.documentDirectory chưa sẵn sàng');
+  }
   return `${FileSystem.documentDirectory}${IMAGES_DIR}`;
 };
 
@@ -107,17 +110,23 @@ export const copyImageToAppDirectory = async (
   orderIndex: number
 ): Promise<string> => {
   try {
+    console.log('[FileService] Copying image:', { imageUri, capsuleId, imageId, orderIndex });
+
     // Validate image first
     const validation = await validateImage(imageUri);
     if (!validation.valid) {
+      console.error('[FileService] Validation failed:', validation.error);
       throw new Error(validation.error);
     }
 
     // Create capsule directory if needed
     const capsuleDir = getCapsuleDirectory(capsuleId);
+    console.log('[FileService] Target directory:', capsuleDir);
+
     const dirInfo = await FileSystem.getInfoAsync(capsuleDir);
 
     if (!dirInfo.exists) {
+      console.log('[FileService] Creating directory...');
       await FileSystem.makeDirectoryAsync(capsuleDir, { intermediates: true });
     }
 
@@ -126,17 +135,21 @@ export const copyImageToAppDirectory = async (
     const filename = `${imageId}_${orderIndex}${extension}`;
     const destinationPath = `${capsuleDir}/${filename}`;
 
+    console.log('[FileService] Copying from:', imageUri);
+    console.log('[FileService] Copying to:', destinationPath);
+
     // Copy file
     await FileSystem.copyAsync({
       from: imageUri,
       to: destinationPath,
     });
 
-    console.log('[FileService] Image copied:', destinationPath);
+    console.log('[FileService] Image copied successfully');
     return destinationPath;
   } catch (error) {
     console.error('[FileService] Failed to copy image:', error);
-    throw new Error(`Không thể sao chép ảnh: ${error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Không thể sao chép ảnh: ${errorMessage}`);
   }
 };
 
