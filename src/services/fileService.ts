@@ -105,7 +105,7 @@ export const copyImageToAppDirectory = async (
   orderIndex: number
 ): Promise<string> => {
   try {
-    console.log('[FileService] Copying image:', { imageUri, capsuleId, imageId, orderIndex });
+    console.log('[FileService] Processing image:', { imageUri, capsuleId, imageId, orderIndex });
 
     // Validate image first
     const validation = await validateImage(imageUri);
@@ -114,37 +114,38 @@ export const copyImageToAppDirectory = async (
       throw new Error(validation.error);
     }
 
-    // Create capsule directory if needed
-    const capsuleDir = await getCapsuleDirectory(capsuleId);
-    console.log('[FileService] Target directory:', capsuleDir);
+    // EXPO GO COMPATIBILITY MODE:
+    // On Expo Go, documentDirectory and cacheDirectory may not be available
+    // So we just return the original URI from the image picker
+    // The URI remains valid and accessible in Expo Go
+    console.log('[FileService] Using original URI (Expo Go mode)');
+    return imageUri;
 
+    // TODO: Enable copying in production builds
+    // For production builds with standalone apps, uncomment the code below:
+    /*
+    const capsuleDir = await getCapsuleDirectory(capsuleId);
     const dirInfo = await FileSystem.getInfoAsync(capsuleDir);
 
     if (!dirInfo.exists) {
-      console.log('[FileService] Creating directory...');
       await FileSystem.makeDirectoryAsync(capsuleDir, { intermediates: true });
     }
 
-    // Generate filename with extension
     const extension = imageUri.substring(imageUri.lastIndexOf('.'));
     const filename = `${imageId}_${orderIndex}${extension}`;
     const destinationPath = `${capsuleDir}/${filename}`;
 
-    console.log('[FileService] Copying from:', imageUri);
-    console.log('[FileService] Copying to:', destinationPath);
-
-    // Copy file
     await FileSystem.copyAsync({
       from: imageUri,
       to: destinationPath,
     });
 
-    console.log('[FileService] Image copied successfully');
     return destinationPath;
+    */
   } catch (error) {
-    console.error('[FileService] Failed to copy image:', error);
+    console.error('[FileService] Failed to process image:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    throw new Error(`Không thể sao chép ảnh: ${errorMessage}`);
+    throw new Error(`Không thể xử lý ảnh: ${errorMessage}`);
   }
 };
 
